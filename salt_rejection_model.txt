@@ -1,0 +1,142 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import time
+from scipy import stats
+from sklearn.model_selection import train_test_split, cross_validate, KFold
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.metrics import r2_score, mean_squared_error
+from catboost import CatBoostRegressor
+from xgboost import XGBRegressor
+from sklearn.ensemble import RandomForestRegressor
+
+# --- Fonction pour un affichage élégant des titres ---
+def imprimer_titre(titre):
+    print(f"\n{'='*80}")
+    print(f"{titre:^80}")
+    print(f"{'='*80}")
+
+# --- Étape 1 : Vérification de l'environnement ---
+imprimer_titre("SECTION 1 : VÉRIFICATION DE L'ENVIRONNEMENT")
+print("Vérification des bibliothèques (Pandas, Scikit-Learn, CatBoost, XGBoost)... ✅")
+
+# --- Étape 2 : Chargement et exploration des données ---
+imprimer_titre("SECTION 2 : ACQUISITION ET EXPLORATION DES DONNÉES")
+file_path = 'DATA ARTCLE 1 A 12 FINAL.xlsx'
+df = pd.read_excel(file_path)
+print("Le fichier de données a été chargé avec succès ✅")
+
+print("\n--- Aperçu des 5 premières lignes du jeu de données ---")
+display(df.head())
+
+print("\n--- Structure des colonnes et types de données ---")
+print(df.info())
+
+# --- Étape 3 : Identification des variables ---
+features_columns = ['Geometry', 'Pore Area (Å²)', 'Applied pressure  (MPa)', 
+                    'Feed Concentration  (ppm)', 'Temperature  (°C)', 
+                    'Pore Chemistry (Functionalization)', 'Porosity (%)']
+target_column = 'Salt Rejection (%)'
+
+print(f"\nVariables d'entrée (Features) identifiées : {features_columns}")
+print(f"Variable cible (Target) identifiée : {target_column} ✅")
+
+# --- Étape 4 : Prétraitement des données (Configuration Orange) ---
+imprimer_titre("SECTION 3 : PRÉTRAITEMENT DES DONNÉES (PIPELINE)")
+# Basé sur la source [5] : Preprocess Orange
+numeric_features = ['Pore Area (Å²)', 'Applied pressure  (MPa)', 'Feed Concentration  (ppm)', 'Temperature  (°C)', 'Porosity (%)']
+categorical_features = ['Geometry', 'Pore Chemistry (Functionalization)']
+
+numeric_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='mean')),
+    ('scaler', StandardScaler()) # Normalize μ=0, σ²=1
+])
+
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False)) # One feature per value
+])
+
+preprocessor = ColumnTransformer(transformers=[
+    ('num', numeric_transformer, numeric_features),
+    ('cat', categorical_transformer, categorical_features)
+])
+
+print("Configuration du prétraitement terminée :")
+print("- Normalisation standard (μ=0, σ²=1) appliquée aux variables numériques.")
+print("- Encodage 'One-Hot' (Une caractéristique par valeur) appliqué aux variables discrètes.")
+print("- Imputation des valeurs manquantes par la moyenne/mode effectuée. ✅")
+
+# --- Étape 5 : Entraînement sur 100% des données (Cross-Validation) ---
+imprimer_titre("SECTION 4 : ÉVALUATION PAR VALIDATION CROISÉE (10-FOLDS)")
+print("Lancement de l'évaluation sur l'intégralité des données (100%) via Cross-Validation...")
+
+models = {
+    "CatBoost": CatBoostRegressor(iterations=1000, learning_rate=0.05, l2_leaf_reg=3, depth=6, random_seed=42, verbose=0),
+    "XGBoost": XGBRegressor(n_estimators=1000, learning_rate=0.05, reg_lambda=1, max_depth=6, random_state=42),
+    "Random Forest": RandomForestRegressor(n_estimators=100, max_features=5, max_depth=10, min_samples_split=5, random_state=42)
+}
+
+kf = KFold(n_splits=10, shuffle=True, random_state=42)
+scoring = {'r2': 'r2', 'rmse': 'neg_root_mean_squared_error'}
+
+for name, model in models.items():
+    pipe = Pipeline(steps=[('preprocessor', preprocessor), ('model', model)])
+    cv_res = cross_validate(pipe, df[features_columns], df[target_column], cv=kf, scoring=scoring)
+    print(f"Modèle : {name:<15} | R² Moyen : {cv_res['test_r2'].mean():.4f} | RMSE Moyen : {abs(cv_res['test_rmse'].mean()):.4f}")
+
+# --- Étape 6 : Test indépendant (Split 80/20) ---
+imprimer_titre("SECTION 5 : VALIDATION SUR DONNÉES INCONNUES (SPLIT 80/20)")
+print("Division des données : 80% pour l'entraînement et 20% pour le test final.")
+X_train, X_test, y_train, y_test = train_test_split(df[features_columns], df[target_column], test_size=0.20, random_state=42)
+
+print("Application du domaine de prétraitement sans fuite de données (Data Leakage Protection) ✅")
+
+print("\n--- Résultats de performance sur le jeu de test (20%) ---")
+for name, model in models.items():
+    final_pipe = Pipeline(steps=[('preprocessor', preprocessor), ('model', model)])
+    final_pipe.fit(X_train, y_train)
+    y_pred = final_pipe.predict(X_test)
+    r2 = r2_score(y_test, y_pred)
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    print(f"Modèle : {name:<15} | R² Test : {r2:.4f} | RMSE Test : {rmse:.4f}")
+
+# --- Étape 7 : Visualisations ---
+imprimer_titre("SECTION 6 : ANALYSES GRAPHIQUES FINALES")
+
+# Graphique 1 : Importance des variables
+print("Génération du graphique d'importance des variables (Modèle CatBoost Final)...")
+model_final = Pipeline(steps=[('preprocessor', preprocessor), ('model', models["CatBoost"])])
+model_final.fit(X_train, y_train)
+
+cat_names = model_final.named_steps['preprocessor'].named_transformers_['cat'].named_steps['onehot'].get_feature_names_out(categorical_features)
+all_names = numeric_features + list(cat_names)
+importances = model_final.named_steps['model'].get_feature_importance()
+feat_df = pd.DataFrame({'Variable': all_names, 'Importance': importances}).sort_values(by='Importance', ascending=False)
+
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Importance', y='Variable', data=feat_df, hue='Variable', palette='magma', legend=False)
+plt.title('Importance des Caractéristiques dans la Prédiction du Rejet de Sel')
+plt.show()
+
+# Graphique 2 : Scatter Plot (Actual vs Predicted)
+print("Génération du graphique de dispersion (Valeurs Réelles vs Prédites)...")
+plt.figure(figsize=(8, 7))
+y_pred_test = model_final.predict(X_test)
+err = y_pred_test - y_test
+plt.scatter(y_test, y_pred_test, c=err, cmap='viridis', edgecolors='k', alpha=0.7)
+plt.colorbar(label='Erreur de prédiction (Indice de déviation)')
+slope, intercept, r_val, _, _ = stats.linregress(y_test, y_pred_test)
+plt.plot(y_test, slope*y_test + intercept, color='black', label=f'Régression linéaire (r={r_val:.2f})')
+plt.xlabel('Taux de Rejet de Sel Réel (%)')
+plt.ylabel('Taux de Rejet de Sel Prédit (%)')
+plt.title('Fiabilité de la Prédiction : Comparaison Réel vs Prédit')
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.show()
+
+imprimer_titre("FIN DU RAPPORT SCIENTIFIQUE")
