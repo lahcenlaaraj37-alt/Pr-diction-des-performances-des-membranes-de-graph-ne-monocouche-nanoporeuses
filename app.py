@@ -41,11 +41,10 @@ st.set_page_config(
 )
 
 # ============================================================
-# === CSS GLOBAL AVEC CORRECTION COMPLÈTE DU PROBLÈME DE MENU ===
+# === CSS GLOBAL ===
 # ============================================================
 _APP_CSS = """
 <style>
-    /* === STYLES DE BASE === */
     body {
         font-family: 'Inter', sans-serif;
         background: linear-gradient(135deg, #001f3f 0%, #003366 25%, #004080 50%, #0059b3 75%, #0066cc 100%);
@@ -57,91 +56,14 @@ _APP_CSS = """
         border-radius: 20px;
         box-shadow: 0 8px 32px rgba(0, 102, 204, 0.2);
         backdrop-filter: blur(10px);
-        padding-top: 0 !important;
-        padding-bottom: 1rem;
+        padding: 2rem 1.5rem !important;
         max-width: 1200px;
         margin-top: 140px !important;
-        padding-top: 1rem !important;
-    }
-
-    .stApp {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-    }
-
-    .stApp > div > div > div > div > div,
-    .stApp header,
-    .stApp .stToolbar,
-    .stApp .stHeader,
-    .stApp [data-testid="stHeader"],
-    .stApp [data-testid="stToolbar"] {
-        display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    .gp-card {
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid rgba(0, 102, 204, 0.2);
-        padding: 0.8rem;
-        box-shadow: 0 1px 4px rgba(0, 102, 204, 0.05);
-        height: calc(100vh - 250px);
-        overflow-y: auto;
-    }
-
-    .gp-kpi-label {
-        opacity: 0.8;
-        font-size: 0.85rem;
-        margin: 0;
-        color: #004080;
-        font-weight: 600;
-    }
-
-    .gp-kpi-value {
-        font-size: 1.8rem;
-        font-weight: 800;
-        margin: 0.1rem 0 0;
-        color: #0066cc;
-        text-shadow: 0 1px 2px rgba(0, 102, 204, 0.2);
-    }
-
-    .gp-pill {
-        display: inline-block;
-        padding: 0.35rem 0.75rem;
-        border-radius: 999px;
-        background: linear-gradient(135deg, #004080 0%, #0066cc 100%);
-        border: 1px solid rgba(0, 102, 204, 0.3);
-        font-size: 0.85rem;
-        color: white;
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
-    }
-
-    div.stButton > button[kind="primary"] {
-        background: linear-gradient(135deg, #004080 0%, #0066cc 100%) !important;
-        border: 1px solid #0059b3 !important;
-        color: white !important;
-        font-weight: 600 !important;
-        box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3) !important;
-        transition: all 0.3s ease !important;
-    }
-
-    div.stButton > button[kind="primary"]:hover {
-        background: linear-gradient(135deg, #0059b3 0%, #0073e6 100%) !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4) !important;
     }
 
     [data-testid="stSidebar"] {
         background-color: #1e3a8a !important;
         padding-top: 20px !important;
-    }
-
-    [data-testid="stSidebar"] .st-emotion-cache-16txtl3 {
-        padding-top: 0rem !important;
     }
 
     [data-testid="stSidebar"] p {
@@ -200,6 +122,37 @@ _APP_CSS = """
         color: #FFFFFF !important;
     }
 
+    section[data-testid="stSidebar"] * {
+        color: #FFFFFF !important;
+        opacity: 1 !important;
+    }
+
+    section[data-testid="stSidebar"] nav ul li a {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        color: #FFFFFF !important;
+    }
+
+    section[data-testid="stSidebar"] nav ul li a[aria-current="page"] {
+        background-color: #1E88E5 !important;
+        border-radius: 8px !important;
+    }
+
+    div.stButton > button[kind="primary"] {
+        background: linear-gradient(135deg, #004080 0%, #0066cc 100%) !important;
+        border: 1px solid #0059b3 !important;
+        color: white !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3) !important;
+        transition: all 0.3s ease !important;
+    }
+
+    div.stButton > button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #0059b3 0%, #0073e6 100%) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4) !important;
+    }
+
     .stTextInput > div > div > input,
     .stNumberInput > div > div > input,
     .stSelectbox > div > div > select {
@@ -226,52 +179,12 @@ _APP_CSS = """
         margin-bottom: 1rem !important;
     }
 
-    .stTextInput > div > div > input:focus,
-    .stNumberInput > div > div > input:focus,
-    .stSelectbox > div > div > select:focus {
-        border-color: #0066cc !important;
-        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1) !important;
-    }
-
-    .stColumns > div {
-        height: calc(100vh - 250px);
-    }
-
-    section[data-testid="stSidebar"] * {
-        color: #FFFFFF !important;
-        opacity: 1 !important;
-    }
-
-    section[data-testid="stSidebar"] nav ul li a {
-        font-size: 18px !important;
-        font-weight: 600 !important;
-        color: #FFFFFF !important;
-    }
-
-    section[data-testid="stSidebar"] nav ul li a[aria-current="page"] {
-        background-color: #1E88E5 !important;
-        border-radius: 8px !important;
-    }
-
-    section[data-testid="stSidebar"] label[data-testid="stWidgetLabel"] p {
-        color: #FFFFFF !important;
-        opacity: 1 !important;
-        font-size: 28px !important;
-        font-weight: 700 !important;
-    }
-
-    /* ===== CORRECTION CRITIQUE : Cacher complètement le bouton Streamlit original ===== */
-    /* On le cache car il cause des problèmes de synchronisation et se fait couvrir par le header */
+    /* ===== Cacher le bouton Streamlit original ===== */
     button[data-testid="collapsedControl"] {
         display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-        position: absolute !important;
-        z-index: -9999 !important;
     }
 
-    /* ===== Bouton Menu flottant - Style amélioré ===== */
+    /* ===== Bouton Menu flottant ===== */
     #floating-menu-btn {
         position: fixed;
         top: 15px;
@@ -299,7 +212,6 @@ _APP_CSS = """
         border-color: #1e3a8a !important;
         color: #1e3a8a !important;
         box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4) !important;
-        transform: translateY(-1px) !important;
     }
 
     /* ============================================================ */
@@ -308,8 +220,8 @@ _APP_CSS = """
     @media screen and (max-width: 768px) {
         .main .block-container {
             margin-top: 100px !important;
-            padding: 0.5rem !important;
-            border-radius: 10px !important;
+            padding: 0.8rem !important;
+            border-radius: 12px !important;
             max-width: 100% !important;
         }
 
@@ -336,48 +248,12 @@ _APP_CSS = """
             min-width: 70px !important;
         }
 
-        .stColumns > div {
-            height: auto !important;
-        }
-
-        .gp-card {
-            height: auto !important;
-            max-height: 400px !important;
-        }
-
-        /* Header responsive */
-        .mobile-header {
-            padding: 0.8rem 1rem !important;
-            padding-left: 60px !important;
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 0.5rem !important;
-        }
-
-        .mobile-header .header-title {
-            font-size: 1.3rem !important;
-        }
-
-        .mobile-header .header-subtitle {
-            font-size: 0.75rem !important;
-        }
-
-        .mobile-header .header-dev {
-            font-size: 0.7rem !important;
-        }
-
-        .mobile-header .header-dev-info {
-            font-size: 0.7rem !important;
-        }
-
-        /* Ajustement des colonnes */
         [data-testid="column"] {
             width: 100% !important;
             flex: 1 1 100% !important;
             min-width: 100% !important;
         }
 
-        /* Table responsive */
         [data-testid="stDataEditor"] {
             overflow-x: auto !important;
         }
@@ -385,8 +261,8 @@ _APP_CSS = """
 
     @media screen and (max-width: 480px) {
         .main .block-container {
-            margin-top: 85px !important;
-            padding: 0.3rem !important;
+            margin-top: 80px !important;
+            padding: 0.5rem !important;
         }
 
         [data-testid="stAppViewContainer"] h2 {
@@ -474,148 +350,37 @@ def _chemistry_picker(chemistry_display: list[str]) -> str:
 
 
 # ============================================================
-# === GESTION DE LA BARRE LATÉRALE - SOLUTION COMPLÈTE ===
+# === GESTION DE LA BARRE LATÉRALE ===
 # ============================================================
 def sidebar_toggle():
-    """
-    Gère l'affichage de la barre latérale via notre propre bouton ☰ Menu.
-    Le bouton Streamlit original est complètement caché pour éviter les conflits.
-    """
+    """Gère l'affichage de la barre latérale via notre propre bouton ☰ Menu."""
     
-    # Initialiser l'état si nécessaire
     if 'sidebar_open' not in st.session_state:
         st.session_state.sidebar_open = True
     
-    # Appliquer le CSS pour masquer/afficher la sidebar selon l'état
+    # CSS pour masquer/afficher la sidebar
     if not st.session_state.sidebar_open:
         st.markdown(
             """<style>
             section[data-testid="stSidebar"] {
-                display: none !important;
-                visibility: hidden !important;
-                width: 0 !important;
-                min-width: 0 !important;
-                max-width: 0 !important;
-                overflow: hidden !important;
-            }
-            section[data-testid="stSidebar"] * {
                 display: none !important;
             }
             </style>""",
             unsafe_allow_html=True,
         )
     else:
-        # S'assurer que la sidebar est visible
         st.markdown(
             """<style>
             section[data-testid="stSidebar"] {
                 display: flex !important;
-                visibility: visible !important;
-                width: auto !important;
-                min-width: auto !important;
-                max-width: none !important;
-                overflow: visible !important;
-            }
-            section[data-testid="stSidebar"] * {
-                display: initial !important;
             }
             </style>""",
             unsafe_allow_html=True,
         )
     
-    # JavaScript pour gérer la sidebar de façon robuste
-    st.markdown(
-        """
-        <script>
-        (function() {
-            function manageSidebar() {
-                const sidebar = document.querySelector('section[data-testid="stSidebar"]');
-                if (!sidebar) {
-                    setTimeout(manageSidebar, 200);
-                    return;
-                }
-                
-                // Récupérer l'état actuel depuis Python (injecté via data attribute)
-                const shouldBeOpen = sidebar.getAttribute('data-sidebar-open') === 'true';
-                
-                if (shouldBeOpen) {
-                    // Forcer l'affichage de la sidebar
-                    sidebar.style.display = 'flex';
-                    sidebar.style.visibility = 'visible';
-                    sidebar.style.width = '';
-                    sidebar.style.minWidth = '';
-                    sidebar.style.maxWidth = '';
-                    sidebar.style.overflow = 'visible';
-                    
-                    // Afficher tous les enfants
-                    const allChildren = sidebar.querySelectorAll('*');
-                    allChildren.forEach(function(child) {
-                        child.style.display = '';
-                    });
-                } else {
-                    // Cacher complètement la sidebar
-                    sidebar.style.display = 'none';
-                    sidebar.style.visibility = 'hidden';
-                    sidebar.style.width = '0px';
-                    sidebar.style.minWidth = '0px';
-                    sidebar.style.maxWidth = '0px';
-                    sidebar.style.overflow = 'hidden';
-                    
-                    // Cacher tous les enfants
-                    const allChildren = sidebar.querySelectorAll('*');
-                    allChildren.forEach(function(child) {
-                        child.style.display = 'none';
-                    });
-                }
-            }
-            
-            // Exécuter immédiatement et périodiquement pour contrer Streamlit
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', function() {
-                    setTimeout(manageSidebar, 100);
-                    setInterval(manageSidebar, 500);
-                });
-            } else {
-                setTimeout(manageSidebar, 100);
-                setInterval(manageSidebar, 500);
-            }
-        })();
-        </script>
-        """,
-        unsafe_allow_html=True,
-    )
-    
-    # Définir l'attribut data-sidebar-open sur la sidebar pour le JavaScript
-    sidebar_state = "true" if st.session_state.sidebar_open else "false"
-    st.markdown(
-        f"""
-        <script>
-        (function() {{
-            function setSidebarState() {{
-                const sidebar = document.querySelector('section[data-testid="stSidebar"]');
-                if (sidebar) {{
-                    sidebar.setAttribute('data-sidebar-open', '{sidebar_state}');
-                }} else {{
-                    setTimeout(setSidebarState, 200);
-                }}
-            }}
-            if (document.readyState === 'loading') {{
-                document.addEventListener('DOMContentLoaded', function() {{
-                    setTimeout(setSidebarState, 100);
-                }});
-            }} else {{
-                setTimeout(setSidebarState, 100);
-            }}
-        }})();
-        </script>
-        """,
-        unsafe_allow_html=True,
-    )
-    
     # Bouton flottant ☰ Menu
     st.markdown('<div id="floating-menu-btn">', unsafe_allow_html=True)
     
-    # Texte du bouton selon l'état
     btn_text = "✕ Fermer" if st.session_state.sidebar_open else "☰ Menu"
     
     if st.button(btn_text, key="toggle_sb_unique", help="Afficher/Masquer le menu de navigation"):
@@ -629,7 +394,6 @@ def sidebar_toggle():
 # === FONCTION PRINCIPALE ===
 # ============================================================
 def main():
-    sidebar_toggle()
     _init_state()
     
     salt_model, flux_model = _load_models()
@@ -686,22 +450,25 @@ def main():
             ],
         )
     
+    # Appeler sidebar_toggle APRÈS la sidebar pour que le bouton fonctionne
+    sidebar_toggle()
+    
     # Header
     st.markdown(
         """
-        <div class="mobile-header" style="position: fixed; top: 0; left: 0; right: 0; width: 100%; background: linear-gradient(135deg, #1e3a8a 0%, #2c5282 100%); padding: 1.5rem 2rem; padding-left: 100px; z-index: 9998; box-shadow: 0 4px 20px rgba(30, 58, 138, 0.3); display: flex; justify-content: space-between; align-items: center;">
+        <div style="position: fixed; top: 0; left: 0; right: 0; width: 100%; background: linear-gradient(135deg, #1e3a8a 0%, #2c5282 100%); padding: 1.2rem 1.5rem; padding-left: 100px; z-index: 9998; box-shadow: 0 4px 20px rgba(30, 58, 138, 0.3); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
             <div style="display: flex; flex-direction: column; justify-content: center;">
-                <div class="header-title" style="font-size: 2.2rem; font-weight: 800; color: #FFFFFF; line-height: 1.2; margin-bottom: 0.25rem;">
+                <div style="font-size: 1.8rem; font-weight: 800; color: #FFFFFF; line-height: 1.2; margin-bottom: 0.2rem;">
                     🌊 Aqua.LA.Graph-Lite v1.0
                 </div>
-                <div class="header-subtitle" style="font-size: 0.9rem; color: #dbeafe; font-weight: 400; margin-bottom: 0.15rem;">
+                <div style="font-size: 0.85rem; color: #dbeafe; font-weight: 400; margin-bottom: 0.1rem;">
                     ML Web Tool for Monolayer Nanoporous Graphene Membranes
                 </div>
-                <div class="header-dev" style="font-size: 0.75rem; color: #a5d8ff; font-weight: 300;">
+                <div style="font-size: 0.7rem; color: #a5d8ff; font-weight: 300;">
                     PFE | UM5-FSR-M:S.A.Q.E
                 </div>
             </div>
-            <div class="header-dev-info" style="color: #FFFFFF; font-size: 0.85rem; font-weight: 500;">
+            <div style="color: #FFFFFF; font-size: 0.8rem; font-weight: 500;">
                 Developed by: LAARAJ Lahcen
             </div>
         </div>
@@ -709,6 +476,8 @@ def main():
         unsafe_allow_html=True,
     )
     
+    # Espace pour compenser le header fixe
+    st.write("")
     st.write("")
     
     geometry_display = sorted({g.strip(): None for g in geometry_choices}.keys()) if geometry_choices else []
@@ -815,7 +584,6 @@ def main():
         with col_viz_results:
             st.subheader(t("membrane", st.session_state.lang))
             
-            # Data Information Note
             st.markdown("""
             <div style="background-color: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 0.8rem; margin-bottom: 1rem;">
                 <p style="color: #1e3a8a; font-size: 0.9rem; margin: 0; line-height: 1.4;">
@@ -836,20 +604,20 @@ def main():
             
             if len(st.session_state.simulations) > 0:
                 last = st.session_state.simulations.iloc[-1]
-                pore_area = float(last.get("Pore Area (Å²)", 0))
-                porosity = float(last.get("Porosity (%)", 0))
-                if porosity > 0:
-                    membrane_area = pore_area / (porosity / 100)
+                pore_area_val = float(last.get("Pore Area (Å²)", 0))
+                porosity_val = float(last.get("Porosity (%)", 0))
+                if porosity_val > 0:
+                    membrane_area = pore_area_val / (porosity_val / 100)
                 else:
-                    membrane_area = pore_area
+                    membrane_area = pore_area_val
                 
                 st.markdown(
                     f"""
-                    <div style='background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%); padding: 15px; border-radius: 12px; margin: 15px 0; border-left: 4px solid #6c757d; box-shadow: 0 4px 15px rgba(108, 117, 125, 0.1);'>
+                    <div style='background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%); padding: 15px; border-radius: 12px; margin: 15px 0; border-left: 4px solid #6c757d;'>
                         <div style='font-weight: bold; color: #495057; margin-bottom: 8px; font-size: 1.1em;'>📏 Membrane Area</div>
                         <div style='font-size: 1.8em; font-weight: 800; color: #6c757d; margin-bottom: 5px;'>{membrane_area:.2f}</div>
-                        <div style='font-size: 0.9em; color: #666; border-top: 1px solid #ddd; padding-top: 5px;'>Å² (square angstroms)</div>
-                        <div style='font-size: 0.85em; color: #888; margin-top: 3px;'>Calculated from pore area {pore_area:.2f} Å² and porosity {porosity:.1f}%</div>
+                        <div style='font-size: 0.9em; color: #666; border-top: 1px solid #ddd; padding-top: 5px;'>Å²</div>
+                        <div style='font-size: 0.85em; color: #888; margin-top: 3px;'>Calculated from pore area {pore_area_val:.2f} Å² and porosity {porosity_val:.1f}%</div>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -865,7 +633,7 @@ def main():
                 flux_error = flux_val * 0.05
                 st.markdown(
                     f"""
-                    <div style='background: linear-gradient(145deg, #f0f8ff 0%, #e6f3ff 100%); padding: 15px; border-radius: 12px; margin: 12px 0; border-left: 4px solid #0066cc; box-shadow: 0 4px 15px rgba(0, 102, 204, 0.1);'>
+                    <div style='background: linear-gradient(145deg, #f0f8ff 0%, #e6f3ff 100%); padding: 15px; border-radius: 12px; margin: 12px 0; border-left: 4px solid #0066cc;'>
                         <div style='font-weight: bold; color: #004080; margin-bottom: 8px; font-size: 1.1em;'>💧 Water Flux</div>
                         <div style='font-size: 1.8em; font-weight: 800; color: #0066cc; margin-bottom: 5px;'>{flux_val:.3f}</div>
                         <div style='font-size: 0.9em; color: #666; border-top: 1px solid #ddd; padding-top: 5px;'>Error margin: ±{flux_error:.3f} (±5%)</div>
@@ -879,7 +647,7 @@ def main():
                 salt_error = salt_val * 0.03
                 st.markdown(
                     f"""
-                    <div style='background: linear-gradient(145deg, #f0fff0 0%, #e6ffe6 100%); padding: 15px; border-radius: 12px; margin: 12px 0; border-left: 4px solid #28a745; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1);'>
+                    <div style='background: linear-gradient(145deg, #f0fff0 0%, #e6ffe6 100%); padding: 15px; border-radius: 12px; margin: 12px 0; border-left: 4px solid #28a745;'>
                         <div style='font-weight: bold; color: #1e5f1e; margin-bottom: 8px; font-size: 1.1em;'>🛡️ Salt Rejection</div>
                         <div style='font-size: 1.8em; font-weight: 800; color: #28a745; margin-bottom: 5px;'>{salt_val:.1f}%</div>
                         <div style='font-size: 0.9em; color: #666; border-top: 1px solid #ddd; padding-top: 5px;'>Error margin: ±{salt_error:.1f}% (±3%)</div>
@@ -914,7 +682,7 @@ def main():
                                 <span style='font-weight: bold; color: {color}; font-size: 0.9em;'>{percentage:.1f}%</span>
                             </div>
                             <div style='background: #e0e0e0; border-radius: 10px; height: 8px; overflow: hidden;'>
-                                <div style='background: {color}; height: 100%; width: {percentage}%; border-radius: 10px; transition: width 0.3s ease;'></div>
+                                <div style='background: {color}; height: 100%; width: {percentage}%; border-radius: 10px;'></div>
                             </div>
                         </div>
                         """,
@@ -957,10 +725,10 @@ def main():
             9. `Water Flux (molecule/ns)` (will be calculated)
             
             **⚠️ Important Constraints:**
-            - **Verify units** before uploading - ensure all values use correct units
+            - **Verify units** before uploading
             - **Stay within training data ranges** for reliable predictions
-            - **Use only available geometry types** from single simulation
-            - **Use only available pore chemistry types** from single simulation
+            - **Use only available geometry types**
+            - **Use only available pore chemistry types**
             """)
         
         if numeric_ranges:
@@ -1006,7 +774,7 @@ def main():
                             min_v, max_v = float(r["min"]), float(r["max"])
                             out_of_range = df_up[(df_up[col] < min_v) | (df_up[col] > max_v)]
                             if len(out_of_range) > 0:
-                                warnings_list.append(f"⚠️ {col}: {len(out_of_range)} rows outside training range ({min_v:.4g} - {max_v:.4g})")
+                                warnings_list.append(f"⚠️ {col}: {len(out_of_range)} rows outside training range")
                 
                 if geometry_choices:
                     valid_geoms = [g.strip() for g in geometry_choices if g.strip()]
@@ -1170,31 +938,26 @@ def main():
         st.markdown("**🎯 Target Performance:**")
         col_t1, col_t2 = st.columns(2)
         with col_t1:
-            inv_flux = st.number_input("Target water flux (molecule/ns)", value=10.0, step=0.1,
-                                       help="Desired water flux value")
+            inv_flux = st.number_input("Target water flux (molecule/ns)", value=10.0, step=0.1)
         with col_t2:
-            inv_sr = st.number_input("Target salt rejection (%)", value=95.0, step=0.1,
-                                     help="Desired salt rejection percentage")
+            inv_sr = st.number_input("Target salt rejection (%)", value=95.0, step=0.1)
         
         st.markdown("**⚙️ Operating Conditions:**")
         col1, col2 = st.columns(2)
         with col1:
-            inv_temp = st.number_input("Temperature (°C)", value=25.0, step=0.1, help="Operating temperature")
-            inv_pressure = st.number_input("Pressure (MPa)", value=1.0, step=0.1, help="Applied pressure")
+            inv_temp = st.number_input("Temperature (°C)", value=25.0, step=0.1)
+            inv_pressure = st.number_input("Pressure (MPa)", value=1.0, step=0.1)
         with col2:
-            inv_feed = st.number_input("Feed concentration (ppm)", value=1000.0, step=10.0,
-                                       help="Salt concentration in feed water")
-            inv_porosity = st.number_input("Porosity (%)", value=10.0, step=0.1, help="Membrane porosity")
+            inv_feed = st.number_input("Feed concentration (ppm)", value=1000.0, step=10.0)
+            inv_porosity = st.number_input("Porosity (%)", value=10.0, step=0.1)
         
         st.markdown("**🧪 Pore Chemistry:**")
-        inv_chemistry = st.selectbox("Select pore chemistry", options=["OH", "H", "Pristine"],
-                                     help="Limited to most common options with sufficient data")
-        st.caption("ℹ️ Limited to OH, H, and Pristine options as they have the most data points in our training set for better inverse design accuracy.")
+        inv_chemistry = st.selectbox("Select pore chemistry", options=["OH", "H", "Pristine"])
+        st.caption("ℹ️ Limited to OH, H, and Pristine options for better inverse design accuracy.")
         
         st.markdown("**🔷 Pore Geometry:**")
-        inv_geometry = st.selectbox("Select pore geometry", options=["hexagonal", "circular"],
-                                    help="Limited to most common geometries")
-        st.caption("ℹ️ Limited to hexagonal and circular geometries as they have the most comprehensive data coverage for reliable inverse predictions.")
+        inv_geometry = st.selectbox("Select pore geometry", options=["hexagonal", "circular"])
+        st.caption("ℹ️ Limited to hexagonal and circular geometries for reliable inverse predictions.")
         
         inv_btn = st.button("🔍 Estimate Optimal Pore Area", type="primary", width="stretch")
         
@@ -1212,23 +975,6 @@ def main():
                         "Pore Chemistry (Functionalization)": inv_chemistry,
                         "Porosity (%)": inv_porosity,
                     }
-                    
-                    warnings_list = []
-                    for col, val in [
-                        ("Applied pressure (MPa)", inv_pressure),
-                        ("Feed Concentration (ppm)", inv_feed),
-                        ("Temperature (°C)", inv_temp),
-                        ("Porosity (%)", inv_porosity)
-                    ]:
-                        r_check = numeric_ranges.get(col, {})
-                        if r_check:
-                            min_v, max_v = float(r_check["min"]), float(r_check["max"])
-                            if val < min_v or val > max_v:
-                                warnings_list.append(f"⚠️ {col}: {val:.4g} outside training range ({min_v:.4g} - {max_v:.4g})")
-                    
-                    if warnings_list:
-                        st.warning("⚠️ **Input warnings:**\n" + "\n".join(warnings_list))
-                        st.info("Results may be less reliable for out-of-range values.")
                     
                     min_a, max_a = float(r["min"]), float(r["max"])
                     grid_points = 50
@@ -1251,7 +997,6 @@ def main():
                     progress_bar.empty()
                     
                     if best and grid_points >= 30:
-                        st.info("🔍 Refining search for better accuracy...")
                         a_refine, _ = best
                         refine_range = (max_a - min_a) / grid_points
                         min_refine = max(min_a, a_refine - refine_range)
@@ -1270,19 +1015,14 @@ def main():
                         a, pred = best
                         st.success(f"🎯 **Final Optimal Pore Area:** {a:.4g} Å²")
                         
-                        st.markdown("### 📊 **Final Prediction Results:**")
                         col_main1, col_main2 = st.columns(2)
                         with col_main1:
                             st.markdown(
                                 f"""
-                                <div style='background: linear-gradient(145deg, #f0f8ff 0%, #e6f3ff 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #0066cc; box-shadow: 0 6px 20px rgba(0, 102, 204, 0.15);'>
-                                    <div style='font-weight: bold; color: #004080; margin-bottom: 10px; font-size: 1.2em;'>💧 Water Flux</div>
-                                    <div style='font-size: 2.2em; font-weight: 900; color: #0066cc; margin-bottom: 8px;'>{pred.flux:.3f}</div>
-                                    <div style='background: rgba(0, 102, 204, 0.1); padding: 8px; border-radius: 6px; margin-top: 10px;'>
-                                        <div style='font-size: 0.95em; color: #004080;'><strong>Error Margin:</strong> ±{pred.flux*0.05:.3f}</div>
-                                        <div style='font-size: 0.85em; color: #666; margin-top: 3px;'>(±5% uncertainty)</div>
-                                        <div style='font-size: 0.85em; color: #888; margin-top: 2px;'>molecule/ns</div>
-                                    </div>
+                                <div style='background: linear-gradient(145deg, #f0f8ff 0%, #e6f3ff 100%); padding: 15px; border-radius: 12px; border-left: 5px solid #0066cc;'>
+                                    <div style='font-weight: bold; color: #004080; margin-bottom: 8px;'>💧 Water Flux</div>
+                                    <div style='font-size: 2em; font-weight: 900; color: #0066cc;'>{pred.flux:.3f}</div>
+                                    <div style='font-size: 0.9em; color: #666; margin-top: 8px;'>±{pred.flux*0.05:.3f} (±5%)</div>
                                 </div>
                                 """,
                                 unsafe_allow_html=True,
@@ -1290,51 +1030,10 @@ def main():
                         with col_main2:
                             st.markdown(
                                 f"""
-                                <div style='background: linear-gradient(145deg, #f0fff0 0%, #e6ffe6 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #28a745; box-shadow: 0 6px 20px rgba(40, 167, 69, 0.15);'>
-                                    <div style='font-weight: bold; color: #1e5f1e; margin-bottom: 10px; font-size: 1.2em;'>🛡️ Salt Rejection</div>
-                                    <div style='font-size: 2.2em; font-weight: 900; color: #28a745; margin-bottom: 8px;'>{min(pred.salt_rejection, 100.0):.1f}%</div>
-                                    <div style='background: rgba(40, 167, 69, 0.1); padding: 8px; border-radius: 6px; margin-top: 10px;'>
-                                        <div style='font-size: 0.95em; color: #1e5f1e;'><strong>Error Margin:</strong> ±{min(pred.salt_rejection, 100.0)*0.03:.1f}%</div>
-                                        <div style='font-size: 0.85em; color: #666; margin-top: 3px;'>(±3% uncertainty, clamped to 100%)</div>
-                                    </div>
-                                </div>
-                                """,
-                                unsafe_allow_html=True,
-                            )
-                        
-                        st.markdown("---")
-                        col_info1, col_info2 = st.columns(2)
-                        with col_info1:
-                            st.markdown(
-                                f"""
-                                <div style='background: linear-gradient(145deg, #fff3cd 0%, #ffeaa7 100%); padding: 15px; border-radius: 12px; border-left: 4px solid #f39c12;'>
-                                    <div style='font-weight: bold; color: #856404; margin-bottom: 8px; font-size: 1.1em;'>⚙️ Design Parameters</div>
-                                    <div style='font-size: 0.9em; color: #6c757d;'>
-                                        <div><strong>Geometry:</strong> {inv_geometry}</div>
-                                        <div><strong>Chemistry:</strong> {inv_chemistry}</div>
-                                        <div><strong>Pressure:</strong> {inv_pressure} MPa</div>
-                                        <div><strong>Temperature:</strong> {inv_temp}°C</div>
-                                        <div><strong>Feed Conc.:</strong> {inv_feed} ppm</div>
-                                        <div><strong>Porosity:</strong> {inv_porosity}%</div>
-                                    </div>
-                                </div>
-                                """,
-                                unsafe_allow_html=True,
-                            )
-                        with col_info2:
-                            st.markdown(
-                                f"""
-                                <div style='background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;'>
-                                    <div style='font-weight: bold; color: #856404; margin-bottom: 8px;'>📈 Target vs. Actual</div>
-                                    <div style='font-size: 0.9em; color: #856404;'>
-                                        <div><strong>Target Flux:</strong> {inv_flux} molecule/ns</div>
-                                        <div><strong>Achieved Flux:</strong> {pred.flux:.3f} molecule/ns</div>
-                                        <div><strong>Target Rejection:</strong> {inv_sr}%</div>
-                                        <div><strong>Achieved Rejection:</strong> {min(pred.salt_rejection, 100.0):.1f}%</div>
-                                        <div style='margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0e68c;'>
-                                            <strong>Overall Error:</strong> {best_err:.3f}
-                                        </div>
-                                    </div>
+                                <div style='background: linear-gradient(145deg, #f0fff0 0%, #e6ffe6 100%); padding: 15px; border-radius: 12px; border-left: 5px solid #28a745;'>
+                                    <div style='font-weight: bold; color: #1e5f1e; margin-bottom: 8px;'>🛡️ Salt Rejection</div>
+                                    <div style='font-size: 2em; font-weight: 900; color: #28a745;'>{min(pred.salt_rejection, 100.0):.1f}%</div>
+                                    <div style='font-size: 0.9em; color: #666; margin-top: 8px;'>±{min(pred.salt_rejection, 100.0)*0.03:.1f}% (±3%)</div>
                                 </div>
                                 """,
                                 unsafe_allow_html=True,
@@ -1360,7 +1059,6 @@ def main():
         api_key_configured = False
         api_key = None
         
-        import os
         api_key = os.environ.get("GROQ_API_KEY")
         if api_key and len(api_key) > 10:
             api_key_configured = True
@@ -1376,29 +1074,16 @@ def main():
         if not api_key_configured:
             st.warning("""
             ⚠️ **AI Chatbot Not Configured**
-
-            To enable chatbot functionality:
-            1. Go to your Streamlit Cloud dashboard
-            2. Navigate to your app settings
-            3. Add a new secret: `GROQ_API_KEY`
-            4. Enter your Groq API key
-
-            **To get a Groq API key:**
-            1. Visit [Groq Console](https://console.groq.com/keys)
-            2. Create a new API key
-            3. Copy and paste it into your Streamlit secrets
-
-            The chatbot can answer questions about desalination, graphene membranes, and water treatment in Arabic, French, or English.
-
-            **Configure the API key to start chatting with the AI assistant.**
+            
+            To enable chatbot functionality, add `GROQ_API_KEY` to your Streamlit secrets.
+            Visit [Groq Console](https://console.groq.com/keys) to get an API key.
             """)
             
-            st.markdown("**Chat History:**")
             for role, msg in st.session_state.chat:
                 with st.chat_message(role):
                     st.write(msg)
         else:
-            st.success("✅ AI Chatbot is ready! Ask questions about desalination and graphene membranes.")
+            st.success("✅ AI Chatbot is ready!")
             st.caption("Powered by Groq + RAG - Available in Arabic, French, and English")
             
             for role, msg in st.session_state.chat:
@@ -1409,10 +1094,9 @@ def main():
             
             st.markdown("""
             <div style="background-color: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
-                <p style="color: #1e3a8a; font-size: 0.9rem; margin: 0; line-height: 1.4;">
-                    <strong>🤖 AI Assistant Notice:</strong> I am an independent AI assistant trained on the same data and algorithms used to develop this application.
-                    I have been trained on the molecular dynamics simulation data, scientific literature, and technical specifications that were used to build Aqua.LA.Graph-Lite v1.0.
-                    While I strive to provide accurate and helpful information, I may occasionally make mistakes. Please verify critical information through the original sources and scientific literature.
+                <p style="color: #1e3a8a; font-size: 0.9rem; margin: 0;">
+                    <strong>🤖 AI Assistant Notice:</strong> I am an AI assistant trained on molecular dynamics simulation data and scientific literature.
+                    While I strive to provide accurate information, please verify critical information through original sources.
                 </p>
             </div>
             """, unsafe_allow_html=True)
@@ -1432,309 +1116,105 @@ def main():
                 st.rerun()
     
     def render_about():
-        try:
-            img1_b64 = base64.b64encode(open("assets/Image1.jpg", "rb").read()).decode()
-        except:
-            img1_b64 = ""
-        try:
-            img2_b64 = base64.b64encode(open("assets/Image2.jpg", "rb").read()).decode()
-        except:
-            img2_b64 = ""
-        
-        st.markdown(f"""
-        <div style="position: relative; height: 180px; margin-bottom: 2rem;">
-            <img src="data:image/jpeg;base64,{img1_b64}"
-                 style="position: absolute; top: 0; left: 0; width: 150px; height: 150px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-            <img src="data:image/jpeg;base64,{img2_b64}"
-                 style="position: absolute; top: 0; right: 0; width: 150px; height: 150px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        </div>
-        """, unsafe_allow_html=True)
-        
         st.markdown("""
-        <h1 style="color: #1e3a8a; font-size: 2.5rem; font-weight: 700; text-align: center; margin-bottom: 1rem;">
+        <h1 style="color: #1e3a8a; font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 1rem;">
             About Aqua.LA.Graph-Lite v1.0
         </h1>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.8rem; font-weight: 600; text-align: center; margin-bottom: 2rem;">
+        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; text-align: center; margin-bottom: 2rem;">
             ML Web Tool for Monolayer Nanoporous Graphene Membranes
         </h2>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border-left: 4px solid #1e3a8a;">
-            <h3 style="color: #1e3a8a; font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem;">
+        <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; border-left: 4px solid #1e3a8a;">
+            <h3 style="color: #1e3a8a; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem;">
                 Master's Final Project (PFE)
             </h3>
-            <p style="color: #333; font-size: 1.1rem; margin-bottom: 0.5rem;">
+            <p style="color: #333; font-size: 1rem; margin-bottom: 0.3rem;">
                 Analytical Sciences, Quality & Environment (S.A.Q.E)
             </p>
-            <p style="color: #333; font-size: 1.1rem; margin: 0;">
+            <p style="color: #333; font-size: 1rem; margin: 0;">
                 Faculty of Sciences, Mohammed V University, Rabat
             </p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
+        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.8rem;">
             Project Overview
         </h2>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="color: #333; line-height: 1.6; font-size: 1.05rem;">
-            Water scarcity is one of the most pressing challenges of our time, acutely felt in regions such as the Arabian Gulf and North Africa.
-            Seawater desalination has become a strategic necessity. While traditional thermal methods and polymeric reverse osmosis membranes
-            dominate the industry, a next-generation solution is on the horizon: single-layer nanoporous graphene membranes. These atomically thin
-            materials, perforated with precisely controlled nanopores, promise exceptional water permeance and near-perfect salt rejection, potentially
-            revolutionizing desalination with dramatically lower energy consumption.
+        <div style="color: #333; line-height: 1.6; font-size: 1rem;">
+            Water scarcity is one of the most pressing challenges of our time. Seawater desalination has become a strategic necessity.
+            Single-layer nanoporous graphene membranes promise exceptional water permeance and near-perfect salt rejection,
+            potentially revolutionizing desalination with dramatically lower energy consumption.
 
-            However, designing and optimizing these membranes today relies almost entirely on molecular dynamics (MD) simulations --- a process that
-            demands massive supercomputing resources, extensive expertise, and weeks or months of computation. This dependency creates a critical bottleneck,
-            slowing down research and excluding many talented scientists worldwide, especially those with limited access to high-performance computing.
-
-            <span style="font-weight: 600; color: #1e3a8a;">Aqua.LA.Graph-Lite v1.0 was built to help break this barrier.</span>
+            <span style="font-weight: 600; color: #1e3a8a;">Aqua.LA.Graph-Lite v1.0 was built to help break the computational barrier</span>
+            by enabling instant predictions without supercomputers.
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
-            Our Mission
+        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.8rem;">
+            How It Works
         </h2>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="color: #333; line-height: 1.6; font-size: 1.05rem;">
-            This free, openly accessible web tool empowers researchers, engineers, and students to instantly predict the performance of single-layer
-            nanoporous graphene membranes for seawater desalination --- without writing a single line of code or accessing a supercomputer. The user
-            simply inputs the membrane's physicochemical and operational parameters; the tool returns the predicted water flux and salt rejection rate.
-
-            The goal is not to replace molecular dynamics simulations, but to dramatically reduce the number of necessary simulations, allowing
-            researchers to rapidly screen the design space, identify promising candidates, and focus their heavy computational work only where it
-            truly matters.
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
-            How It Works & Model Performance
-        </h2>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="color: #333; line-height: 1.6; font-size: 1.05rem;">
-            The predictive engine is powered by CatBoost, a state-of-the-art gradient boosting algorithm, trained on a carefully curated dataset of
-            460 clean data points extracted from 12 rigorously selected, peer-reviewed scientific articles. All data originates from established
-            molecular dynamics studies published in internationally recognized journals.
+        <div style="color: #333; line-height: 1.6; font-size: 1rem;">
+            Powered by CatBoost, trained on 460 clean data points from 12 peer-reviewed articles.
         </div>
         """, unsafe_allow_html=True)
         
         col1, col2 = st.columns([1, 1])
-        
         with col1:
             st.markdown("""
-            <div style="background-color: #e8f4fd; padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem;">
-                <h3 style="color: #1e3a8a; font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;">
-                    Input parameters (7):
-                </h3>
-                <ul style="color: #333; line-height: 1.6; font-size: 1rem; margin: 0; padding-left: 1.5rem;">
+            <div style="background-color: #e8f4fd; padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                <h3 style="color: #1e3a8a; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.8rem;">Input parameters (7):</h3>
+                <ul style="color: #333; line-height: 1.5; font-size: 0.95rem; margin: 0; padding-left: 1.2rem;">
                     <li>Pore shape</li>
                     <li>Pore area (Å²)</li>
                     <li>Applied pressure (MPa)</li>
-                    <li>Pore chemistry (functionalization)</li>
+                    <li>Pore chemistry</li>
                     <li>Porosity (%)</li>
                     <li>Temperature (°C)</li>
                     <li>Feed salt concentration (ppm)</li>
                 </ul>
             </div>
             """, unsafe_allow_html=True)
-        
         with col2:
             st.markdown("""
-            <div style="background-color: #e8f4fd; padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem;">
-                <h3 style="color: #1e3a8a; font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;">
-                    Predicted outputs (2):
-                </h3>
-                <ul style="color: #333; line-height: 1.6; font-size: 1rem; margin: 0; padding-left: 1.5rem;">
-                    <li>Water flux (molecules/nanosecond)</li>
+            <div style="background-color: #e8f4fd; padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                <h3 style="color: #1e3a8a; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.8rem;">Predicted outputs (2):</h3>
+                <ul style="color: #333; line-height: 1.5; font-size: 0.95rem; margin: 0; padding-left: 1.2rem;">
+                    <li>Water flux (molecules/ns)</li>
                     <li>Salt rejection (%)</li>
                 </ul>
             </div>
             """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div style="color: #333; line-height: 1.6; font-size: 1.05rem;">
-            The model was developed, tested, and validated through a robust pipeline using Orange Data Mining for initial screening, followed by
-            Python (Jupyter Notebook, Anaconda) for final validation and hyperparameter tuning. The flux output uses a logarithmic transformation
-            (log(flux+1)) to handle the wide dynamic range inherent to nanopore transport phenomena.
-
-            The model demonstrated strong predictive performance on both training and held-out test sets. Full reproducible workflows, performance
-            metrics, and code are openly available on GitHub.
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
+        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.8rem;">
             Important Disclaimer
         </h2>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem;">
-            <p style="color: #856404; line-height: 1.6; font-size: 1.05rem; margin: 0;">
-                <strong>Aqua.LA.Graph-Lite v1.0 is a research-support tool, not a replacement for rigorous simulation or
-                experiment.</strong><br><br>
-
-                Although the model was built on real, published molecular dynamics data and achieved solid performance during training
-                and testing, its predictions remain based on a limited dataset of 460 samples. The model is designed to help researchers
-                narrow down the number of full MD simulations they need to run. It does not eliminate the need for detailed computational
-                or experimental validation.<br><br>
-
-                The tool harnesses the power of artificial intelligence to compress what would traditionally take weeks or months of
-                computation into mere seconds --- enabling researchers to explore ideas and hypotheses that would otherwise be impractical.
-                This is the true promise of AI in scientific research: accelerating discovery, not bypassing rigor.<br><br>
-
-                By using this tool, you acknowledge that the developers and supervisors bear no responsibility for any decisions, designs,
-                or conclusions made solely based on its outputs. Always verify critical results through established scientific methods.
+        <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem;">
+            <p style="color: #856404; line-height: 1.6; font-size: 0.95rem; margin: 0;">
+                <strong>Aqua.LA.Graph-Lite v1.0 is a research-support tool, not a replacement for rigorous simulation or experiment.</strong><br>
+                Always verify critical results through established scientific methods.
             </p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
+        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.8rem;">
             Supervisors & Student
         </h2>
+        <p><strong>LAARAJ LAHCEN</strong> - Master S.A.Q.E, UM5 FSR Rabat</p>
+        <p>📧 lahcen_laaraj@um5.ac.ma | lahcenelaaraj37@gmail.com</p>
+        <p><strong>Supervisors:</strong> Prof. S. EL HAJJAJI & Prof. Z. ZITI</p>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        **LAARAJ LAHCEN**
-        Master S.A.Q.E, Faculty of Sciences, Mohammed V University, Rabat
-        📧 lahcen_laaraj@um5.ac.ma | lahcenelaaraj37@gmail.com
-
-        <h3 style='color:#1e3a8a; font-size:1.2rem; font-weight:600; margin-bottom:1rem; margin-top:1.5rem;'>Supervising Professors:</h3>
-        <div style='color:#333; font-size:1.05rem; font-weight:600; margin-bottom:0.5rem;'>
-            Prof. S. EL HAJJAJI
-        </div>
-        <div style='color:#333; font-size:1.05rem; font-weight:600; margin-bottom:0.5rem;'>
-            Prof. Z. ZITI
-        </div>
-        <div style='color:#333; font-size:1rem; margin:0;'>
-            Faculty of Sciences, Mohammed V University, Rabat
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
-            Open Science & Reproducibility
+        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.8rem;">
+            Open Science
         </h2>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="color: #333; line-height: 1.6; font-size: 1.05rem;">
-            Full transparency is a core principle of this project. The entire codebase, including data preprocessing, model training,
-            evaluation, and the Streamlit web application, is publicly available under an open repository:
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="background-color: #e8f4fd; border: 1px solid #93c5fd; border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem;">
-            <div style="color: #333; font-size: 1.05rem; margin: 0;">
-                <strong>🔗 GitHub Repository:</strong><br>
-                <a href="https://github.com/lahcenlaaraj37-alt/Pr-diction-des-performances-des-membranes-de-graph-ne-monocouche-nanoporeuses"
-                   style="color: #1e3a8a; text-decoration: none; font-weight: 600;">
-                    https://github.com/lahcenlaaraj37-alt/Pr-diction-des-performances-des-membranes-de-graph-ne-monocouche-nanoporeuses
-                </a>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="color: #333; line-height: 1.6; font-size: 1.05rem;">
-            You are welcome to explore, fork, audit, and cite the work. We believe open access accelerates science.
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
-            A Note on AI & the Future of Research
-        </h2>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="color: #333; line-height: 1.6; font-size: 1.05rem;">
-            Artificial intelligence is reshaping the scientific landscape. Tasks that once demanded immense computational resources and
-            endless timelines can now be approached in a fraction of the time. AI allows researchers to ask more questions, test more
-            hypotheses, and ultimately bring breakthrough technologies like graphene membranes closer to real-world implementation.
-            Aqua.LA.Graph-Lite v1.0 is a modest contribution in that direction --- built not as a final answer, but as a stepping stone.
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
-            Acknowledgments
-        </h2>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="color: #333; line-height: 1.6; font-size: 1.05rem;">
-            We gratefully acknowledge Mohammed V University and the Faculty of Sciences, Rabat for their academic support. Our thanks also
-            go to the global scientific community whose published MD simulation data made this data-driven approach possible.
-        </div>
-        """, unsafe_allow_html=True)
-        
-        try:
-            me_b64 = base64.b64encode(open("assets/Me.jpeg", "rb").read()).decode()
-        except:
-            me_b64 = ""
-        
-        st.markdown(f"""
-        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 15px; padding: 2rem; margin-top: 3rem; margin-bottom: 2rem;">
-            <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
-                <div style="flex-shrink: 0;">
-                    <img src="data:image/jpeg;base64,{me_b64}" alt="LAARAJ LAHCEN"
-                         style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #1e3a8a; box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);">
-                </div>
-                <div style="flex: 1; min-width: 250px;">
-                    <h3 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 700; margin: 0 0 0.5rem 0;">
-                        LAARAJ LAHCEN
-                    </h3>
-                    <div style="color: #475569; font-size: 1.05rem; font-weight: 500; margin-bottom: 1rem;">
-                        Master S.A.Q.E, Faculty of Sciences, Mohammed V University, Rabat
-                    </div>
-                    <div style="color: #64748b; font-size: 0.95rem; margin-bottom: 1rem;">
-                        <strong>📧 Email:</strong>
-                        <a href="mailto:lahcen_laaraj@um5.ac.ma" style="color: #1e3a8a; text-decoration: none; font-weight: 500;">
-                            lahcen_laaraj@um5.ac.ma
-                        </a> |
-                        <a href="mailto:lahcanelaaraj37@gmail.com" style="color: #1e3a8a; text-decoration: none; font-weight: 500;">
-                            lahcanelaaraj37@gmail.com
-                        </a>
-                    </div>
-                    <div style="color: #64748b; font-size: 0.95rem; margin-bottom: 1rem;">
-                        <strong>💼 Professional Role:</strong> Educational Specialist - Supervision of School Laboratories
-                    </div>
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;">
-                        <a href="https://www.linkedin.com/in/lahcen-laaraj-18a18822b/"
-                           target="_blank"
-                           style="background-color: #0077b5; color: white; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                            LinkedIn
-                        </a>
-                        <a href="https://github.com/lahcenlaaraj37-alt"
-                           target="_blank"
-                           style="background-color: #333; color: white; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                            </svg>
-                            GitHub
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <p>🔗 <a href="https://github.com/lahcenlaaraj37-alt" style="color: #1e3a8a; font-weight: 600;">GitHub Repository</a></p>
         """, unsafe_allow_html=True)
     
     # ============================================================
