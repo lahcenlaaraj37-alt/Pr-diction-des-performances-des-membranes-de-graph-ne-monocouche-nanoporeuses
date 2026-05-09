@@ -58,7 +58,7 @@ _APP_CSS = """
         backdrop-filter: blur(10px);
         padding: 1.5rem 1.5rem !important;
         max-width: 1200px;
-        margin-top: 160px !important;
+        margin-top: 170px !important;
     }
 
     [data-testid="stSidebar"] {
@@ -182,7 +182,7 @@ _APP_CSS = """
     /* ===== Style du bouton Streamlit original ===== */
     button[data-testid="collapsedControl"] {
         position: fixed !important;
-        top: 3.5rem !important;
+        top: 7rem !important;
         left: 0.5rem !important;
         z-index: 999999 !important;
         background: #1e3a8a !important;
@@ -198,7 +198,7 @@ _APP_CSS = """
     /* ===== Style du bouton ☰ Menu ===== */
     #floating-menu-btn {
         position: fixed;
-        top: 3.5rem;
+        top: 7rem;
         left: 3.5rem;
         z-index: 999999;
     }
@@ -227,7 +227,7 @@ _APP_CSS = """
     /* ============================================================ */
     @media screen and (max-width: 768px) {
         .main .block-container {
-            margin-top: 140px !important;
+            margin-top: 150px !important;
             padding: 0.8rem !important;
             border-radius: 12px !important;
             max-width: 100% !important;
@@ -242,13 +242,17 @@ _APP_CSS = """
         }
 
         #floating-menu-btn {
-            top: 3.5rem;
+            top: 7rem;
             left: 3.5rem;
         }
 
         #floating-menu-btn button {
             padding: 5px 10px !important;
             font-size: 0.85rem !important;
+        }
+
+        button[data-testid="collapsedControl"] {
+            top: 7rem !important;
         }
 
         [data-testid="column"] {
@@ -284,12 +288,12 @@ _APP_CSS = """
 
     @media screen and (max-width: 480px) {
         .main .block-container {
-            margin-top: 130px !important;
+            margin-top: 145px !important;
             padding: 0.5rem !important;
         }
         
         #floating-menu-btn {
-            top: 3.2rem;
+            top: 6.8rem;
             left: 3.2rem;
         }
         
@@ -299,7 +303,7 @@ _APP_CSS = """
         }
         
         button[data-testid="collapsedControl"] {
-            top: 3.2rem !important;
+            top: 6.8rem !important;
             left: 0.3rem !important;
         }
     }
@@ -462,10 +466,10 @@ def main():
     # Appeler sidebar_toggle APRÈS la sidebar
     sidebar_toggle()
     
-    # Header FIXE en haut, collé au bandeau Streamlit
+    # Header FIXE - top: 3.6rem pour être juste sous le bandeau Streamlit
     st.markdown(
         """
-        <div class="custom-header" style="position: fixed; top: 2.8rem; left: 0; right: 0; width: 100%; background: linear-gradient(135deg, #1e3a8a 0%, #2c5282 100%); padding: 0.8rem 1.5rem; z-index: 99999; box-shadow: 0 4px 20px rgba(30, 58, 138, 0.4); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <div class="custom-header" style="position: fixed; top: 3.6rem; left: 0; right: 0; width: 100%; background: linear-gradient(135deg, #1e3a8a 0%, #2c5282 100%); padding: 0.8rem 1.5rem; z-index: 99999; box-shadow: 0 4px 20px rgba(30, 58, 138, 0.4); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
             <div style="display: flex; flex-direction: column; justify-content: center;">
                 <div class="header-title" style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; line-height: 1.2; margin-bottom: 0.1rem;">
                     🌊 Aqua.LA.Graph-Lite v1.0
