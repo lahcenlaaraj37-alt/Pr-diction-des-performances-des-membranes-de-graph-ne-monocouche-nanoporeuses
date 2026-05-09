@@ -58,6 +58,7 @@ _APP_CSS = """
         backdrop-filter: blur(10px);
         padding: 1.5rem 1.5rem !important;
         max-width: 1200px;
+        margin-top: 160px !important;
     }
 
     [data-testid="stSidebar"] {
@@ -178,10 +179,10 @@ _APP_CSS = """
         margin-bottom: 1rem !important;
     }
 
-    /* ===== Style du bouton Streamlit original pour le rendre visible et bien placé ===== */
+    /* ===== Style du bouton Streamlit original ===== */
     button[data-testid="collapsedControl"] {
         position: fixed !important;
-        top: 0.5rem !important;
+        top: 3.5rem !important;
         left: 0.5rem !important;
         z-index: 999999 !important;
         background: #1e3a8a !important;
@@ -197,7 +198,7 @@ _APP_CSS = """
     /* ===== Style du bouton ☰ Menu ===== */
     #floating-menu-btn {
         position: fixed;
-        top: 0.5rem;
+        top: 3.5rem;
         left: 3.5rem;
         z-index: 999999;
     }
@@ -226,6 +227,7 @@ _APP_CSS = """
     /* ============================================================ */
     @media screen and (max-width: 768px) {
         .main .block-container {
+            margin-top: 140px !important;
             padding: 0.8rem !important;
             border-radius: 12px !important;
             max-width: 100% !important;
@@ -233,18 +235,14 @@ _APP_CSS = """
 
         [data-testid="stAppViewContainer"] h2 {
             font-size: 1.3rem !important;
-            margin-top: 0.5rem !important;
-            margin-bottom: 1rem !important;
         }
 
         [data-testid="stAppViewContainer"] h3 {
             font-size: 1.1rem !important;
-            margin-top: 0.8rem !important;
-            margin-bottom: 0.8rem !important;
         }
 
         #floating-menu-btn {
-            top: 0.5rem;
+            top: 3.5rem;
             left: 3.5rem;
         }
 
@@ -261,6 +259,48 @@ _APP_CSS = """
 
         [data-testid="stDataEditor"] {
             overflow-x: auto !important;
+        }
+
+        .custom-header {
+            padding: 0.8rem 0.5rem !important;
+        }
+        
+        .custom-header .header-title {
+            font-size: 1.2rem !important;
+        }
+        
+        .custom-header .header-subtitle {
+            font-size: 0.7rem !important;
+        }
+        
+        .custom-header .header-dev {
+            font-size: 0.65rem !important;
+        }
+        
+        .custom-header .header-dev-info {
+            font-size: 0.7rem !important;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .main .block-container {
+            margin-top: 130px !important;
+            padding: 0.5rem !important;
+        }
+        
+        #floating-menu-btn {
+            top: 3.2rem;
+            left: 3.2rem;
+        }
+        
+        #floating-menu-btn button {
+            padding: 4px 8px !important;
+            font-size: 0.8rem !important;
+        }
+        
+        button[data-testid="collapsedControl"] {
+            top: 3.2rem !important;
+            left: 0.3rem !important;
         }
     }
 </style>
@@ -422,27 +462,33 @@ def main():
     # Appeler sidebar_toggle APRÈS la sidebar
     sidebar_toggle()
     
-    # Header - PLUS DE position:fixed, il s'affiche dans le flux normal
-    st.markdown("---")
+    # Header FIXE en haut, collé au bandeau Streamlit
     st.markdown(
         """
-        <div style="background: linear-gradient(135deg, #1e3a8a 0%, #2c5282 100%); padding: 1.5rem 2rem; border-radius: 15px; box-shadow: 0 4px 20px rgba(30, 58, 138, 0.3); margin-bottom: 1.5rem; text-align: center;">
-            <div style="font-size: 2rem; font-weight: 800; color: #FFFFFF; line-height: 1.3; margin-bottom: 0.3rem;">
-                🌊 Aqua.LA.Graph-Lite v1.0
+        <div class="custom-header" style="position: fixed; top: 2.8rem; left: 0; right: 0; width: 100%; background: linear-gradient(135deg, #1e3a8a 0%, #2c5282 100%); padding: 0.8rem 1.5rem; z-index: 99999; box-shadow: 0 4px 20px rgba(30, 58, 138, 0.4); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; flex-direction: column; justify-content: center;">
+                <div class="header-title" style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; line-height: 1.2; margin-bottom: 0.1rem;">
+                    🌊 Aqua.LA.Graph-Lite v1.0
+                </div>
+                <div class="header-subtitle" style="font-size: 0.8rem; color: #dbeafe; font-weight: 400; margin-bottom: 0.05rem;">
+                    ML Web Tool for Monolayer Nanoporous Graphene Membranes
+                </div>
+                <div class="header-dev" style="font-size: 0.7rem; color: #a5d8ff; font-weight: 300;">
+                    PFE | UM5-FSR-M:S.A.Q.E
+                </div>
             </div>
-            <div style="font-size: 0.9rem; color: #dbeafe; font-weight: 400; margin-bottom: 0.15rem;">
-                ML Web Tool for Monolayer Nanoporous Graphene Membranes
-            </div>
-            <div style="font-size: 0.75rem; color: #a5d8ff; font-weight: 300; margin-bottom: 0.5rem;">
-                PFE | UM5-FSR-M:S.A.Q.E
-            </div>
-            <div style="color: #FFFFFF; font-size: 0.8rem; font-weight: 500;">
-                Developed by: LAARAJ Lahcen
+            <div class="header-dev-info" style="color: #FFFFFF; font-size: 0.8rem; font-weight: 500; text-align: right;">
+                Developed by:<br>LAARAJ Lahcen
             </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    
+    # Espace pour compenser le header fixe
+    st.write("")
+    st.write("")
+    st.write("")
     
     geometry_display = sorted({g.strip(): None for g in geometry_choices}.keys()) if geometry_choices else []
     chemistry_display = sorted({c.strip(): None for c in chemistry_choices}.keys()) if chemistry_choices else []
@@ -552,7 +598,6 @@ def main():
             <div style="background-color: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 0.8rem; margin-bottom: 1rem;">
                 <p style="color: #1e3a8a; font-size: 0.9rem; margin: 0; line-height: 1.4;">
                     <strong>📊 Data Information:</strong> In our dataset, all membranes use a single pore per membrane.
-                    You will notice that each membrane visualization shows exactly one pore.
                 </p>
             </div>
             """, unsafe_allow_html=True)
@@ -640,14 +685,12 @@ def main():
             st.dataframe(range_df, use_container_width=True, hide_index=True)
         
         st.markdown("---")
-        
         uploaded = st.file_uploader("📤 Upload Excel File", type=["xlsx"])
         
         if uploaded is not None:
             try:
                 df_up = pd.read_excel(uploaded)
-                st.write(f"📄 File loaded: {len(df_up)} rows found")
-                
+                st.write(f"📄 File loaded: {len(df_up)} rows")
                 missing = [c for c in FEATURES_COLUMNS if c not in df_up.columns]
                 if missing:
                     st.error("❌ Missing columns:\n- " + "\n- ".join(missing))
@@ -659,7 +702,7 @@ def main():
                 df_up["Salt Rejection (%)"] = np.minimum(sr, 100.0)
                 df_up["Water Flux (molecule/ns)"] = (LOG_BASE ** lf) - 1
                 
-                st.success(f"✅ Successfully predicted {len(df_up)} rows!")
+                st.success(f"✅ Predicted {len(df_up)} rows!")
                 st.dataframe(df_up, use_container_width=True)
                 
                 st.session_state.simulations = pd.concat(
@@ -673,103 +716,37 @@ def main():
         st.subheader(t("nav_viz", st.session_state.lang))
         
         if len(st.session_state.simulations) > 0:
-            st.markdown("**📊 Simulation Table:**")
-            
             df_display = st.session_state.simulations.copy()
             column_config = {}
             
             if geometry_display:
-                column_config["Geometry"] = st.column_config.SelectboxColumn(
-                    "Geometry", options=geometry_display, required=True
-                )
-            
+                column_config["Geometry"] = st.column_config.SelectboxColumn("Geometry", options=geometry_display, required=True)
             if chemistry_display:
                 chem_options = chemistry_display.copy()
                 if "Pristine" not in chem_options:
                     chem_options.append("Pristine")
-                column_config["Pore Chemistry (Functionalization)"] = st.column_config.SelectboxColumn(
-                    "Pore Chemistry", options=chem_options, required=True
-                )
+                column_config["Pore Chemistry (Functionalization)"] = st.column_config.SelectboxColumn("Pore Chemistry", options=chem_options, required=True)
             
             for col in NUMERIC_FEATURES:
                 r = numeric_ranges.get(col, {})
                 if r:
-                    column_config[col] = st.column_config.NumberColumn(
-                        col, min_value=float(r["min"]), max_value=float(r["max"]), format="%.4f"
-                    )
+                    column_config[col] = st.column_config.NumberColumn(col, min_value=float(r["min"]), max_value=float(r["max"]), format="%.4f")
                 else:
                     column_config[col] = st.column_config.NumberColumn(col, format="%.4f")
             
-            column_config["Salt Rejection (%)"] = st.column_config.NumberColumn(
-                "Salt Rejection (%)", format="%.2f", disabled=True
-            )
-            column_config["Water Flux (molecule/ns)"] = st.column_config.NumberColumn(
-                "Water Flux (molecule/ns)", format="%.6f", disabled=True
-            )
+            column_config["Salt Rejection (%)"] = st.column_config.NumberColumn("Salt Rejection (%)", format="%.2f", disabled=True)
+            column_config["Water Flux (molecule/ns)"] = st.column_config.NumberColumn("Water Flux (molecule/ns)", format="%.6f", disabled=True)
             
-            edited_df = st.data_editor(
-                df_display, num_rows="dynamic", width="stretch",
-                hide_index=True, column_config=column_config, key="simulation_table"
-            )
-            
-            if not edited_df.equals(st.session_state.simulations):
-                try:
-                    modified_rows = []
-                    for idx in range(len(edited_df)):
-                        if idx < len(st.session_state.simulations):
-                            original_row = st.session_state.simulations.iloc[idx]
-                            edited_row = edited_df.iloc[idx]
-                            inputs_changed = False
-                            for col in FEATURES_COLUMNS:
-                                if col in original_row.index and col in edited_row.index:
-                                    if pd.isna(original_row[col]) != pd.isna(edited_row[col]):
-                                        inputs_changed = True
-                                        break
-                                    elif not pd.isna(original_row[col]) and not pd.isna(edited_row[col]):
-                                        if abs(float(original_row[col]) - float(edited_row[col])) > 1e-10:
-                                            inputs_changed = True
-                                            break
-                            if inputs_changed:
-                                modified_rows.append(idx)
-                        else:
-                            modified_rows.append(idx)
-                    
-                    for idx in modified_rows:
-                        if idx < len(edited_df):
-                            row_inputs = {col: edited_df.iloc[idx][col] for col in FEATURES_COLUMNS if col in edited_df.iloc[idx].index}
-                            pred = _predict_single(row_inputs)
-                            edited_df.loc[idx, "Salt Rejection (%)"] = min(pred.salt_rejection, 100.0)
-                            edited_df.loc[idx, "Water Flux (molecule/ns)"] = pred.flux
-                    
-                    st.session_state.simulations = edited_df.copy()
-                    if modified_rows:
-                        st.success(f"✅ Updated {len(modified_rows)} row(s)!")
-                        st.rerun()
-                except Exception as e:
-                    st.error(f"❌ Error: {str(e)}")
+            st.data_editor(df_display, num_rows="dynamic", width="stretch", hide_index=True, column_config=column_config, key="simulation_table_display")
         else:
             st.info("No simulations yet.")
         
         st.subheader(t("exports", st.session_state.lang))
         col_e1, col_e2 = st.columns(2)
         with col_e1:
-            st.download_button(
-                t("download_csv", st.session_state.lang),
-                data=dataframe_to_bytes(st.session_state.simulations, "csv"),
-                file_name="simulations.csv",
-                mime="text/csv",
-                width="stretch",
-                type="primary",
-            )
+            st.download_button(t("download_csv", st.session_state.lang), data=dataframe_to_bytes(st.session_state.simulations, "csv"), file_name="simulations.csv", mime="text/csv", width="stretch", type="primary")
         with col_e2:
-            st.download_button(
-                t("download_xlsx", st.session_state.lang),
-                data=dataframe_to_bytes(st.session_state.simulations, "xlsx"),
-                file_name="simulations.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                width="stretch",
-                type="primary",
-            )
+            st.download_button(t("download_xlsx", st.session_state.lang), data=dataframe_to_bytes(st.session_state.simulations, "xlsx"), file_name="simulations.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", width="stretch", type="primary")
         
         st.subheader("Plots")
         if len(st.session_state.simulations) >= 2:
@@ -803,22 +780,16 @@ def main():
         
         if st.button("🔍 Estimate Optimal Pore Area", type="primary", width="stretch"):
             try:
-                r = numeric_ranges.get("Pore Area (Å²)", None)
+                r = numeric_ranges.get("Pore Area (Å²)")
                 if r:
                     base_row = {
-                        "Geometry": inv_geometry,
-                        "Applied pressure (MPa)": inv_pressure,
-                        "Feed Concentration (ppm)": inv_feed,
-                        "Temperature (°C)": inv_temp,
-                        "Pore Chemistry (Functionalization)": inv_chemistry,
-                        "Porosity (%)": inv_porosity,
+                        "Geometry": inv_geometry, "Applied pressure (MPa)": inv_pressure,
+                        "Feed Concentration (ppm)": inv_feed, "Temperature (°C)": inv_temp,
+                        "Pore Chemistry (Functionalization)": inv_chemistry, "Porosity (%)": inv_porosity,
                     }
-                    
                     min_a, max_a = float(r["min"]), float(r["max"])
                     grid = np.linspace(min_a, max_a, 50)
-                    
-                    best = None
-                    best_err = float("inf")
+                    best, best_err = None, float("inf")
                     
                     progress_bar = st.progress(0, text="Searching...")
                     for i, a in enumerate(grid):
@@ -828,19 +799,13 @@ def main():
                         pred = _predict_single(row2)
                         err = abs(pred.flux - float(inv_flux)) + 0.3 * abs(min(pred.salt_rejection, 100.0) - float(inv_sr))
                         if err < best_err:
-                            best_err = err
-                            best = (a, pred)
+                            best_err, best = err, (a, pred)
                     progress_bar.empty()
                     
                     if best:
                         a, pred = best
                         st.success(f"🎯 Optimal Pore Area: {a:.4g} Å²")
-                        
-                        col_r1, col_r2 = st.columns(2)
-                        with col_r1:
-                            st.markdown(f"**💧 Water Flux:** {pred.flux:.3f} ±{pred.flux*0.05:.3f}")
-                        with col_r2:
-                            st.markdown(f"**🛡️ Salt Rejection:** {min(pred.salt_rejection, 100.0):.1f}%")
+                        st.markdown(f"**💧 Water Flux:** {pred.flux:.3f} | **🛡️ Salt Rejection:** {min(pred.salt_rejection, 100.0):.1f}%")
                         
                         new_row = {**base_row, "Pore Area (Å²)": a, "Salt Rejection (%)": min(pred.salt_rejection, 100.0), "Water Flux (molecule/ns)": pred.flux}
                         st.session_state.simulations = pd.concat([st.session_state.simulations, pd.DataFrame([new_row])], ignore_index=True)
@@ -850,19 +815,14 @@ def main():
     def render_chat():
         st.subheader(t("nav_chat", st.session_state.lang))
         
-        api_key_configured = False
         api_key = os.environ.get("GROQ_API_KEY")
         if not (api_key and len(api_key) > 10):
             try:
                 api_key = st.secrets.get("GROQ_API_KEY")
-                if api_key and len(api_key) > 10:
-                    api_key_configured = True
             except:
                 pass
-        else:
-            api_key_configured = True
         
-        if not api_key_configured:
+        if not api_key or len(api_key) <= 10:
             st.warning("⚠️ AI Chatbot not configured. Add GROQ_API_KEY to secrets.")
             for role, msg in st.session_state.chat:
                 with st.chat_message(role):
@@ -873,8 +833,7 @@ def main():
                 with st.chat_message(role):
                     st.write(msg)
             
-            prompt = st.chat_input("Ask about desalination...")
-            if prompt:
+            if prompt := st.chat_input("Ask about desalination..."):
                 st.session_state.chat.append(("user", prompt))
                 with st.chat_message("assistant"):
                     with st.spinner("Thinking..."):
@@ -893,23 +852,18 @@ def main():
         
         <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin: 1.5rem 0; border-left: 4px solid #1e3a8a;">
             <h3 style="color: #1e3a8a;">Master's Final Project (PFE)</h3>
-            <p>Analytical Sciences, Quality & Environment (S.A.Q.E)</p>
-            <p>Faculty of Sciences, Mohammed V University, Rabat</p>
+            <p>Analytical Sciences, Quality & Environment (S.A.Q.E) - UM5 FSR Rabat</p>
         </div>
         
         <h2 style="color: #1e3a8a;">Project Overview</h2>
-        <p>Water scarcity demands innovative solutions. Single-layer nanoporous graphene membranes promise exceptional performance for desalination. Aqua.LA.Graph-Lite v1.0 enables instant predictions without supercomputers.</p>
-        
-        <h2 style="color: #1e3a8a;">How It Works</h2>
-        <p>Powered by CatBoost, trained on 460 data points from 12 peer-reviewed articles.</p>
+        <p>Powered by CatBoost, trained on 460 data points from 12 peer-reviewed articles. Enables instant predictions for nanoporous graphene membrane performance.</p>
         
         <div style="background-color: #fff3cd; padding: 1rem; border-radius: 10px; margin: 1.5rem 0;">
-            <p style="color: #856404;"><strong>Disclaimer:</strong> This is a research-support tool. Always verify results through established scientific methods.</p>
+            <p style="color: #856404;"><strong>Disclaimer:</strong> Research-support tool. Always verify results through established scientific methods.</p>
         </div>
         
         <h2 style="color: #1e3a8a;">Contact</h2>
-        <p><strong>LAARAJ LAHCEN</strong> - Master S.A.Q.E, UM5 FSR Rabat</p>
-        <p>📧 lahcen_laaraj@um5.ac.ma</p>
+        <p><strong>LAARAJ LAHCEN</strong> - lahcen_laaraj@um5.ac.ma</p>
         <p><strong>Supervisors:</strong> Prof. S. EL HAJJAJI & Prof. Z. ZITI</p>
         """, unsafe_allow_html=True)
     
