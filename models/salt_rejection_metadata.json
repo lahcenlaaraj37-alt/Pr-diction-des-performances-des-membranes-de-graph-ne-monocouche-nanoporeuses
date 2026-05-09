@@ -1,0 +1,76 @@
+{
+  "features_columns": [
+    "Geometry",
+    "Pore Area (Å²)",
+    "Applied pressure  (MPa)",
+    "Feed Concentration  (ppm)",
+    "Temperature  (°C)",
+    "Pore Chemistry (Functionalization)",
+    "Porosity (%)"
+  ],
+  "target_column": "Salt Rejection (%)",
+  "numeric_features": [
+    "Pore Area (Å²)",
+    "Applied pressure  (MPa)",
+    "Feed Concentration  (ppm)",
+    "Temperature  (°C)",
+    "Porosity (%)"
+  ],
+  "categorical_features": [
+    "Geometry",
+    "Pore Chemistry (Functionalization)"
+  ],
+  "ranges": {
+    "Pore Area (Å²)": {
+      "min": 0.58,
+      "max": 205.314814814815
+    },
+    "Applied pressure  (MPa)": {
+      "min": 1.0,
+      "max": 2500.0
+    },
+    "Feed Concentration  (ppm)": {
+      "min": 0.0,
+      "max": 201670.0
+    },
+    "Temperature  (°C)": {
+      "min": 2.0,
+      "max": 77.0
+    },
+    "Porosity (%)": {
+      "min": 0.029,
+      "max": 70.29
+    }
+  },
+  "categories": {
+    "Geometry": [
+      "Circular",
+      "Circular ",
+      "Hexagonal",
+      "Hexagonal ",
+      "Ozark",
+      "Rhombic",
+      "Triangular"
+    ],
+    "Pore Chemistry (Functionalization)": [
+      "1-Ethyl",
+      "2-Ethyl",
+      "2-Methyl",
+      "4-Methyl",
+      "4F4H",
+      "8F8H",
+      "B",
+      "COO⁻",
+      "FH",
+      "H",
+      "N",
+      "NH",
+      "NO",
+      "OH",
+      "Pristine",
+      "Si",
+      "Si(OH)2",
+      "SiH2"
+    ]
+  }
+}
