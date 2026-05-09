@@ -56,9 +56,8 @@ _APP_CSS = """
         border-radius: 20px;
         box-shadow: 0 8px 32px rgba(0, 102, 204, 0.2);
         backdrop-filter: blur(10px);
-        padding: 2rem 1.5rem !important;
+        padding: 1.5rem 1.5rem !important;
         max-width: 1200px;
-        margin-top: 140px !important;
     }
 
     [data-testid="stSidebar"] {
@@ -179,17 +178,28 @@ _APP_CSS = """
         margin-bottom: 1rem !important;
     }
 
-    /* ===== Cacher le bouton Streamlit original ===== */
+    /* ===== Style du bouton Streamlit original pour le rendre visible et bien placé ===== */
     button[data-testid="collapsedControl"] {
-        display: none !important;
+        position: fixed !important;
+        top: 0.5rem !important;
+        left: 0.5rem !important;
+        z-index: 999999 !important;
+        background: #1e3a8a !important;
+        color: white !important;
+        border-radius: 8px !important;
+        border: 2px solid #93c5fd !important;
     }
 
-    /* ===== Bouton Menu flottant ===== */
+    button[data-testid="collapsedControl"]:hover {
+        background: #2c5282 !important;
+    }
+
+    /* ===== Style du bouton ☰ Menu ===== */
     #floating-menu-btn {
         position: fixed;
-        top: 15px;
-        left: 15px;
-        z-index: 9999999;
+        top: 0.5rem;
+        left: 3.5rem;
+        z-index: 999999;
     }
 
     #floating-menu-btn button {
@@ -197,21 +207,18 @@ _APP_CSS = """
         color: #1e3a8a !important;
         border: 2px solid #1e3a8a !important;
         border-radius: 8px !important;
-        padding: 8px 16px !important;
+        padding: 6px 14px !important;
         font-weight: 700 !important;
-        font-size: 1rem !important;
-        box-shadow: 0 3px 10px rgba(30, 58, 138, 0.3) !important;
+        font-size: 0.9rem !important;
+        box-shadow: 0 2px 8px rgba(30, 58, 138, 0.3) !important;
         cursor: pointer !important;
-        letter-spacing: 0.3px !important;
-        transition: all 0.2s ease !important;
-        min-width: 80px !important;
+        white-space: nowrap !important;
     }
 
     #floating-menu-btn button:hover {
         background: #f0f4ff !important;
         border-color: #1e3a8a !important;
         color: #1e3a8a !important;
-        box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4) !important;
     }
 
     /* ============================================================ */
@@ -219,7 +226,6 @@ _APP_CSS = """
     /* ============================================================ */
     @media screen and (max-width: 768px) {
         .main .block-container {
-            margin-top: 100px !important;
             padding: 0.8rem !important;
             border-radius: 12px !important;
             max-width: 100% !important;
@@ -238,14 +244,13 @@ _APP_CSS = """
         }
 
         #floating-menu-btn {
-            top: 10px;
-            left: 10px;
+            top: 0.5rem;
+            left: 3.5rem;
         }
 
         #floating-menu-btn button {
-            padding: 6px 12px !important;
-            font-size: 0.9rem !important;
-            min-width: 70px !important;
+            padding: 5px 10px !important;
+            font-size: 0.85rem !important;
         }
 
         [data-testid="column"] {
@@ -256,33 +261,6 @@ _APP_CSS = """
 
         [data-testid="stDataEditor"] {
             overflow-x: auto !important;
-        }
-    }
-
-    @media screen and (max-width: 480px) {
-        .main .block-container {
-            margin-top: 80px !important;
-            padding: 0.5rem !important;
-        }
-
-        [data-testid="stAppViewContainer"] h2 {
-            font-size: 1.1rem !important;
-        }
-
-        [data-testid="stAppViewContainer"] h3 {
-            font-size: 1rem !important;
-        }
-
-        #floating-menu-btn {
-            top: 8px;
-            left: 8px;
-        }
-
-        #floating-menu-btn button {
-            padding: 5px 10px !important;
-            font-size: 0.85rem !important;
-            border-radius: 6px !important;
-            min-width: 60px !important;
         }
     }
 </style>
@@ -353,7 +331,7 @@ def _chemistry_picker(chemistry_display: list[str]) -> str:
 # === GESTION DE LA BARRE LATÉRALE ===
 # ============================================================
 def sidebar_toggle():
-    """Gère l'affichage de la barre latérale via notre propre bouton ☰ Menu."""
+    """Bouton ☰ Menu supplémentaire pour contrôler la sidebar."""
     
     if 'sidebar_open' not in st.session_state:
         st.session_state.sidebar_open = True
@@ -368,22 +346,13 @@ def sidebar_toggle():
             </style>""",
             unsafe_allow_html=True,
         )
-    else:
-        st.markdown(
-            """<style>
-            section[data-testid="stSidebar"] {
-                display: flex !important;
-            }
-            </style>""",
-            unsafe_allow_html=True,
-        )
     
     # Bouton flottant ☰ Menu
     st.markdown('<div id="floating-menu-btn">', unsafe_allow_html=True)
     
-    btn_text = "✕ Fermer" if st.session_state.sidebar_open else "☰ Menu"
+    btn_text = "☰ Menu" if not st.session_state.sidebar_open else "✕ Close"
     
-    if st.button(btn_text, key="toggle_sb_unique", help="Afficher/Masquer le menu de navigation"):
+    if st.button(btn_text, key="toggle_sb_unique", help="Afficher/Masquer le menu"):
         st.session_state.sidebar_open = not st.session_state.sidebar_open
         st.rerun()
     
@@ -450,23 +419,22 @@ def main():
             ],
         )
     
-    # Appeler sidebar_toggle APRÈS la sidebar pour que le bouton fonctionne
+    # Appeler sidebar_toggle APRÈS la sidebar
     sidebar_toggle()
     
-    # Header
+    # Header - PLUS DE position:fixed, il s'affiche dans le flux normal
+    st.markdown("---")
     st.markdown(
         """
-        <div style="position: fixed; top: 0; left: 0; right: 0; width: 100%; background: linear-gradient(135deg, #1e3a8a 0%, #2c5282 100%); padding: 1.2rem 1.5rem; padding-left: 100px; z-index: 9998; box-shadow: 0 4px 20px rgba(30, 58, 138, 0.3); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-            <div style="display: flex; flex-direction: column; justify-content: center;">
-                <div style="font-size: 1.8rem; font-weight: 800; color: #FFFFFF; line-height: 1.2; margin-bottom: 0.2rem;">
-                    🌊 Aqua.LA.Graph-Lite v1.0
-                </div>
-                <div style="font-size: 0.85rem; color: #dbeafe; font-weight: 400; margin-bottom: 0.1rem;">
-                    ML Web Tool for Monolayer Nanoporous Graphene Membranes
-                </div>
-                <div style="font-size: 0.7rem; color: #a5d8ff; font-weight: 300;">
-                    PFE | UM5-FSR-M:S.A.Q.E
-                </div>
+        <div style="background: linear-gradient(135deg, #1e3a8a 0%, #2c5282 100%); padding: 1.5rem 2rem; border-radius: 15px; box-shadow: 0 4px 20px rgba(30, 58, 138, 0.3); margin-bottom: 1.5rem; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: #FFFFFF; line-height: 1.3; margin-bottom: 0.3rem;">
+                🌊 Aqua.LA.Graph-Lite v1.0
+            </div>
+            <div style="font-size: 0.9rem; color: #dbeafe; font-weight: 400; margin-bottom: 0.15rem;">
+                ML Web Tool for Monolayer Nanoporous Graphene Membranes
+            </div>
+            <div style="font-size: 0.75rem; color: #a5d8ff; font-weight: 300; margin-bottom: 0.5rem;">
+                PFE | UM5-FSR-M:S.A.Q.E
             </div>
             <div style="color: #FFFFFF; font-size: 0.8rem; font-weight: 500;">
                 Developed by: LAARAJ Lahcen
@@ -475,10 +443,6 @@ def main():
         """,
         unsafe_allow_html=True,
     )
-    
-    # Espace pour compenser le header fixe
-    st.write("")
-    st.write("")
     
     geometry_display = sorted({g.strip(): None for g in geometry_choices}.keys()) if geometry_choices else []
     chemistry_display = sorted({c.strip(): None for c in chemistry_choices}.keys()) if chemistry_choices else []
@@ -588,8 +552,7 @@ def main():
             <div style="background-color: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 0.8rem; margin-bottom: 1rem;">
                 <p style="color: #1e3a8a; font-size: 0.9rem; margin: 0; line-height: 1.4;">
                     <strong>📊 Data Information:</strong> In our dataset, all membranes use a single pore per membrane.
-                    You will notice that each membrane visualization shows exactly one pore, as this represents the standard configuration
-                    used in our molecular dynamics simulations and training data.
+                    You will notice that each membrane visualization shows exactly one pore.
                 </p>
             </div>
             """, unsafe_allow_html=True)
@@ -614,10 +577,9 @@ def main():
                 st.markdown(
                     f"""
                     <div style='background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%); padding: 15px; border-radius: 12px; margin: 15px 0; border-left: 4px solid #6c757d;'>
-                        <div style='font-weight: bold; color: #495057; margin-bottom: 8px; font-size: 1.1em;'>📏 Membrane Area</div>
-                        <div style='font-size: 1.8em; font-weight: 800; color: #6c757d; margin-bottom: 5px;'>{membrane_area:.2f}</div>
-                        <div style='font-size: 0.9em; color: #666; border-top: 1px solid #ddd; padding-top: 5px;'>Å²</div>
-                        <div style='font-size: 0.85em; color: #888; margin-top: 3px;'>Calculated from pore area {pore_area_val:.2f} Å² and porosity {porosity_val:.1f}%</div>
+                        <div style='font-weight: bold; color: #495057; margin-bottom: 8px;'>📏 Membrane Area</div>
+                        <div style='font-size: 1.8em; font-weight: 800; color: #6c757d;'>{membrane_area:.2f} Å²</div>
+                        <div style='font-size: 0.85em; color: #888; margin-top: 5px;'>Pore area: {pore_area_val:.2f} Å² | Porosity: {porosity_val:.1f}%</div>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -631,74 +593,32 @@ def main():
                 
                 flux_val = float(last["Water Flux (molecule/ns)"])
                 flux_error = flux_val * 0.05
-                st.markdown(
-                    f"""
-                    <div style='background: linear-gradient(145deg, #f0f8ff 0%, #e6f3ff 100%); padding: 15px; border-radius: 12px; margin: 12px 0; border-left: 4px solid #0066cc;'>
-                        <div style='font-weight: bold; color: #004080; margin-bottom: 8px; font-size: 1.1em;'>💧 Water Flux</div>
-                        <div style='font-size: 1.8em; font-weight: 800; color: #0066cc; margin-bottom: 5px;'>{flux_val:.3f}</div>
-                        <div style='font-size: 0.9em; color: #666; border-top: 1px solid #ddd; padding-top: 5px;'>Error margin: ±{flux_error:.3f} (±5%)</div>
-                        <div style='font-size: 0.85em; color: #888; margin-top: 3px;'>molecule/ns</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-                
                 salt_val = float(last["Salt Rejection (%)"])
                 salt_error = salt_val * 0.03
-                st.markdown(
-                    f"""
-                    <div style='background: linear-gradient(145deg, #f0fff0 0%, #e6ffe6 100%); padding: 15px; border-radius: 12px; margin: 12px 0; border-left: 4px solid #28a745;'>
-                        <div style='font-weight: bold; color: #1e5f1e; margin-bottom: 8px; font-size: 1.1em;'>🛡️ Salt Rejection</div>
-                        <div style='font-size: 1.8em; font-weight: 800; color: #28a745; margin-bottom: 5px;'>{salt_val:.1f}%</div>
-                        <div style='font-size: 0.9em; color: #666; border-top: 1px solid #ddd; padding-top: 5px;'>Error margin: ±{salt_error:.1f}% (±3%)</div>
-                        <div style='font-size: 0.85em; color: #888; margin-top: 3px;'>(clamped to max 100%)</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
                 
-                st.markdown("---")
-                st.markdown("**📊 Feature Importances:**")
-                st.markdown("*How much each input influenced this prediction:*")
-                
-                feature_importance = {
-                    "Pore Area (Å²)": 0.35,
-                    "Applied pressure (MPa)": 0.28,
-                    "Temperature (°C)": 0.15,
-                    "Feed Concentration (ppm)": 0.12,
-                    "Porosity (%)": 0.07,
-                    "Pore Chemistry": 0.02,
-                    "Geometry": 0.01
-                }
-                
-                for feature, importance in sorted(feature_importance.items(), key=lambda x: x[1], reverse=True):
-                    percentage = importance * 100
-                    color = "#0066cc" if importance > 0.2 else "#4a90e2" if importance > 0.1 else "#7fb3d5"
+                col_res1, col_res2 = st.columns(2)
+                with col_res1:
                     st.markdown(
                         f"""
-                        <div style='margin: 8px 0;'>
-                            <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;'>
-                                <span style='font-weight: 600; color: #333; font-size: 0.9em;'>{feature}</span>
-                                <span style='font-weight: bold; color: {color}; font-size: 0.9em;'>{percentage:.1f}%</span>
-                            </div>
-                            <div style='background: #e0e0e0; border-radius: 10px; height: 8px; overflow: hidden;'>
-                                <div style='background: {color}; height: 100%; width: {percentage}%; border-radius: 10px;'></div>
-                            </div>
+                        <div style='background: linear-gradient(145deg, #f0f8ff 0%, #e6f3ff 100%); padding: 15px; border-radius: 12px; border-left: 4px solid #0066cc;'>
+                            <div style='font-weight: bold; color: #004080; margin-bottom: 8px;'>💧 Water Flux</div>
+                            <div style='font-size: 1.8em; font-weight: 800; color: #0066cc;'>{flux_val:.3f}</div>
+                            <div style='font-size: 0.85em; color: #666; margin-top: 5px;'>±{flux_error:.3f} (±5%) molecule/ns</div>
                         </div>
                         """,
                         unsafe_allow_html=True,
                     )
-                
-                st.markdown("*Higher percentage = more influence on prediction result*")
-                st.markdown("---")
-                st.markdown(
-                    """
-                    <div style='background: #fff3cd; padding: 10px; border-radius: 6px; border-left: 4px solid #ffc107;'>
-                        <div style='font-size: 0.9em; color: #856404;'>ℹ️ This simulation is automatically added to the Analysis & Reports table</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
+                with col_res2:
+                    st.markdown(
+                        f"""
+                        <div style='background: linear-gradient(145deg, #f0fff0 0%, #e6ffe6 100%); padding: 15px; border-radius: 12px; border-left: 4px solid #28a745;'>
+                            <div style='font-weight: bold; color: #1e5f1e; margin-bottom: 8px;'>🛡️ Salt Rejection</div>
+                            <div style='font-size: 1.8em; font-weight: 800; color: #28a745;'>{salt_val:.1f}%</div>
+                            <div style='font-size: 0.85em; color: #666; margin-top: 5px;'>±{salt_error:.1f}% (±3%)</div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
             else:
                 st.info("Run a prediction to see results with error margins.")
     
@@ -707,54 +627,21 @@ def main():
         
         with st.expander("📋 File Requirements & Guidelines", expanded=True):
             st.markdown("""
-            **Required Excel File Format:**
-            - Your file must contain exactly **9 columns** (7 inputs + 2 outputs)
-            - Column names must match exactly (case-sensitive)
-            
-            **Required Input Columns:**
-            1. `Geometry` (text: e.g., 'hexagonal', 'circular')
-            2. `Pore Area (Å²)` (numeric: area in square angstroms)
-            3. `Applied pressure (MPa)` (numeric: pressure in megapascals)
-            4. `Feed Concentration (ppm)` (numeric: salt concentration in ppm)
-            5. `Temperature (°C)` (numeric: temperature in degrees Celsius)
-            6. `Pore Chemistry (Functionalization)` (text: e.g., 'OH', 'H', 'Pristine')
-            7. `Porosity (%)` (numeric: porosity percentage)
-            
-            **Output Columns (will be added automatically):**
-            8. `Salt Rejection (%)` (will be calculated)
-            9. `Water Flux (molecule/ns)` (will be calculated)
-            
-            **⚠️ Important Constraints:**
-            - **Verify units** before uploading
-            - **Stay within training data ranges** for reliable predictions
-            - **Use only available geometry types**
-            - **Use only available pore chemistry types**
+            **Required Excel File Format:** 7 input columns + 2 output columns
+            **Input Columns:** Geometry, Pore Area (Å²), Applied pressure (MPa), Feed Concentration (ppm), Temperature (°C), Pore Chemistry (Functionalization), Porosity (%)
             """)
         
         if numeric_ranges:
-            st.markdown("**📊 Valid Ranges for Numeric Inputs:**")
+            st.markdown("**📊 Valid Ranges:**")
             range_df = pd.DataFrame([
-                {"Parameter": col, "Min": f"{r['min']:.4g}", "Max": f"{r['max']:.4g}", "Unit": col.split('(')[-1].replace(')', '')}
+                {"Parameter": col, "Min": f"{r['min']:.4g}", "Max": f"{r['max']:.4g}"}
                 for col, r in numeric_ranges.items()
             ])
             st.dataframe(range_df, use_container_width=True, hide_index=True)
         
-        if chemistry_choices:
-            st.markdown("**🧪 Valid Pore Chemistry Options:**")
-            chem_options = [c.strip() for c in chemistry_choices if c.strip()]
-            if "Pristine" not in chem_options:
-                chem_options.append("Pristine")
-            st.write(", ".join(chem_options))
-        
-        if geometry_choices:
-            st.markdown("**🔷 Valid Geometry Options:**")
-            geom_options = [g.strip() for g in geometry_choices if g.strip()]
-            st.write(", ".join(geom_options))
-        
         st.markdown("---")
         
-        uploaded = st.file_uploader("📤 Upload Excel File", type=["xlsx"],
-                                    help="Make sure your file follows the format above")
+        uploaded = st.file_uploader("📤 Upload Excel File", type=["xlsx"])
         
         if uploaded is not None:
             try:
@@ -763,34 +650,8 @@ def main():
                 
                 missing = [c for c in FEATURES_COLUMNS if c not in df_up.columns]
                 if missing:
-                    st.error("❌ Uploaded file is missing required columns:\n- " + "\n- ".join(missing))
+                    st.error("❌ Missing columns:\n- " + "\n- ".join(missing))
                     st.stop()
-                
-                warnings_list = []
-                for col in NUMERIC_FEATURES:
-                    if col in df_up.columns:
-                        r = numeric_ranges.get(col, {})
-                        if r:
-                            min_v, max_v = float(r["min"]), float(r["max"])
-                            out_of_range = df_up[(df_up[col] < min_v) | (df_up[col] > max_v)]
-                            if len(out_of_range) > 0:
-                                warnings_list.append(f"⚠️ {col}: {len(out_of_range)} rows outside training range")
-                
-                if geometry_choices:
-                    valid_geoms = [g.strip() for g in geometry_choices if g.strip()]
-                    invalid_geoms = df_up[~df_up["Geometry"].isin(valid_geoms)]
-                    if len(invalid_geoms) > 0:
-                        warnings_list.append(f"⚠️ Geometry: {len(invalid_geoms)} rows with invalid geometry types")
-                
-                if chemistry_choices:
-                    valid_chem = [c.strip() for c in chemistry_choices if c.strip()] + ["Pristine"]
-                    invalid_chem = df_up[~df_up["Pore Chemistry (Functionalization)"].isin(valid_chem)]
-                    if len(invalid_chem) > 0:
-                        warnings_list.append(f"⚠️ Chemistry: {len(invalid_chem)} rows with invalid chemistry types")
-                
-                if warnings_list:
-                    st.warning("⚠️ **Warnings detected:**\n" + "\n".join(warnings_list))
-                    st.info("Predictions may be less reliable for out-of-range values.")
                 
                 X_up = df_up[FEATURES_COLUMNS].copy()
                 sr = salt_model.pipeline.predict(X_up)
@@ -799,7 +660,6 @@ def main():
                 df_up["Water Flux (molecule/ns)"] = (LOG_BASE ** lf) - 1
                 
                 st.success(f"✅ Successfully predicted {len(df_up)} rows!")
-                st.info("📊 All results have been automatically added to Analysis & Reports table")
                 st.dataframe(df_up, use_container_width=True)
                 
                 st.session_state.simulations = pd.concat(
@@ -807,22 +667,20 @@ def main():
                     ignore_index=True,
                 )
             except Exception as e:
-                st.error(f"❌ Error processing file: {str(e)}")
-                st.exception(e)
+                st.error(f"❌ Error: {str(e)}")
     
     def render_viz_reports():
         st.subheader(t("nav_viz", st.session_state.lang))
-        st.subheader(t("table", st.session_state.lang))
         
         if len(st.session_state.simulations) > 0:
-            st.markdown("**📊 Simulation Table (click cells to edit directly):**")
+            st.markdown("**📊 Simulation Table:**")
             
             df_display = st.session_state.simulations.copy()
             column_config = {}
             
             if geometry_display:
                 column_config["Geometry"] = st.column_config.SelectboxColumn(
-                    "Geometry", options=geometry_display, required=True, help="Select pore geometry"
+                    "Geometry", options=geometry_display, required=True
                 )
             
             if chemistry_display:
@@ -830,28 +688,23 @@ def main():
                 if "Pristine" not in chem_options:
                     chem_options.append("Pristine")
                 column_config["Pore Chemistry (Functionalization)"] = st.column_config.SelectboxColumn(
-                    "Pore Chemistry", options=chem_options, required=True, help="Select pore chemistry"
+                    "Pore Chemistry", options=chem_options, required=True
                 )
             
             for col in NUMERIC_FEATURES:
                 r = numeric_ranges.get(col, {})
                 if r:
-                    min_v = float(r["min"])
-                    max_v = float(r["max"])
                     column_config[col] = st.column_config.NumberColumn(
-                        col, min_value=min_v, max_value=max_v, format="%.4f",
-                        help=f"Range: {min_v:.4g} - {max_v:.4g}"
+                        col, min_value=float(r["min"]), max_value=float(r["max"]), format="%.4f"
                     )
                 else:
                     column_config[col] = st.column_config.NumberColumn(col, format="%.4f")
             
             column_config["Salt Rejection (%)"] = st.column_config.NumberColumn(
-                "Salt Rejection (%)", format="%.2f", disabled=True,
-                help="Predicted salt rejection (read-only)"
+                "Salt Rejection (%)", format="%.2f", disabled=True
             )
             column_config["Water Flux (molecule/ns)"] = st.column_config.NumberColumn(
-                "Water Flux (molecule/ns)", format="%.6f", disabled=True,
-                help="Predicted water flux (read-only)"
+                "Water Flux (molecule/ns)", format="%.6f", disabled=True
             )
             
             edited_df = st.data_editor(
@@ -883,23 +736,19 @@ def main():
                     
                     for idx in modified_rows:
                         if idx < len(edited_df):
-                            row_inputs = {}
-                            for col in FEATURES_COLUMNS:
-                                if col in edited_df.iloc[idx].index:
-                                    row_inputs[col] = edited_df.iloc[idx][col]
+                            row_inputs = {col: edited_df.iloc[idx][col] for col in FEATURES_COLUMNS if col in edited_df.iloc[idx].index}
                             pred = _predict_single(row_inputs)
                             edited_df.loc[idx, "Salt Rejection (%)"] = min(pred.salt_rejection, 100.0)
                             edited_df.loc[idx, "Water Flux (molecule/ns)"] = pred.flux
                     
                     st.session_state.simulations = edited_df.copy()
                     if modified_rows:
-                        st.success(f"✅ Updated predictions for {len(modified_rows)} modified row(s)!")
+                        st.success(f"✅ Updated {len(modified_rows)} row(s)!")
                         st.rerun()
                 except Exception as e:
-                    st.error(f"❌ Error updating predictions: {str(e)}")
-                    st.session_state.simulations = df_display.copy()
+                    st.error(f"❌ Error: {str(e)}")
         else:
-            st.info("No simulations yet. Run single simulations or upload batch data.")
+            st.info("No simulations yet.")
         
         st.subheader(t("exports", st.session_state.lang))
         col_e1, col_e2 = st.columns(2)
@@ -933,16 +782,14 @@ def main():
     
     def render_inverse():
         st.subheader(t("nav_inverse", st.session_state.lang))
-        st.caption("Find optimal pore area for your target performance (inverse design).")
+        st.caption("Find optimal pore area for your target performance.")
         
-        st.markdown("**🎯 Target Performance:**")
         col_t1, col_t2 = st.columns(2)
         with col_t1:
             inv_flux = st.number_input("Target water flux (molecule/ns)", value=10.0, step=0.1)
         with col_t2:
             inv_sr = st.number_input("Target salt rejection (%)", value=95.0, step=0.1)
         
-        st.markdown("**⚙️ Operating Conditions:**")
         col1, col2 = st.columns(2)
         with col1:
             inv_temp = st.number_input("Temperature (°C)", value=25.0, step=0.1)
@@ -951,22 +798,13 @@ def main():
             inv_feed = st.number_input("Feed concentration (ppm)", value=1000.0, step=10.0)
             inv_porosity = st.number_input("Porosity (%)", value=10.0, step=0.1)
         
-        st.markdown("**🧪 Pore Chemistry:**")
-        inv_chemistry = st.selectbox("Select pore chemistry", options=["OH", "H", "Pristine"])
-        st.caption("ℹ️ Limited to OH, H, and Pristine options for better inverse design accuracy.")
+        inv_chemistry = st.selectbox("Pore chemistry", options=["OH", "H", "Pristine"])
+        inv_geometry = st.selectbox("Pore geometry", options=["hexagonal", "circular"])
         
-        st.markdown("**🔷 Pore Geometry:**")
-        inv_geometry = st.selectbox("Select pore geometry", options=["hexagonal", "circular"])
-        st.caption("ℹ️ Limited to hexagonal and circular geometries for reliable inverse predictions.")
-        
-        inv_btn = st.button("🔍 Estimate Optimal Pore Area", type="primary", width="stretch")
-        
-        if inv_btn:
+        if st.button("🔍 Estimate Optimal Pore Area", type="primary", width="stretch"):
             try:
                 r = numeric_ranges.get("Pore Area (Å²)", None)
-                if not r:
-                    st.error("❌ No pore-area range found in metadata.")
-                else:
+                if r:
                     base_row = {
                         "Geometry": inv_geometry,
                         "Applied pressure (MPa)": inv_pressure,
@@ -977,16 +815,14 @@ def main():
                     }
                     
                     min_a, max_a = float(r["min"]), float(r["max"])
-                    grid_points = 50
-                    grid = np.linspace(min_a, max_a, grid_points)
+                    grid = np.linspace(min_a, max_a, 50)
                     
                     best = None
                     best_err = float("inf")
                     
-                    progress_bar = st.progress(0, text="Searching optimal pore area...")
+                    progress_bar = st.progress(0, text="Searching...")
                     for i, a in enumerate(grid):
-                        progress = (i + 1) / grid_points
-                        progress_bar.progress(progress, text=f"Searching... {progress:.0%}")
+                        progress_bar.progress((i+1)/50, text=f"Searching... {(i+1)/50:.0%}")
                         row2 = dict(base_row)
                         row2["Pore Area (Å²)"] = float(a)
                         pred = _predict_single(row2)
@@ -996,111 +832,48 @@ def main():
                             best = (a, pred)
                     progress_bar.empty()
                     
-                    if best and grid_points >= 30:
-                        a_refine, _ = best
-                        refine_range = (max_a - min_a) / grid_points
-                        min_refine = max(min_a, a_refine - refine_range)
-                        max_refine = min(max_a, a_refine + refine_range)
-                        refine_grid = np.linspace(min_refine, max_refine, 20)
-                        for a in refine_grid:
-                            row2 = dict(base_row)
-                            row2["Pore Area (Å²)"] = float(a)
-                            pred = _predict_single(row2)
-                            err = abs(pred.flux - float(inv_flux)) + 0.3 * abs(min(pred.salt_rejection, 100.0) - float(inv_sr))
-                            if err < best_err:
-                                best_err = err
-                                best = (a, pred)
-                    
                     if best:
                         a, pred = best
-                        st.success(f"🎯 **Final Optimal Pore Area:** {a:.4g} Å²")
+                        st.success(f"🎯 Optimal Pore Area: {a:.4g} Å²")
                         
-                        col_main1, col_main2 = st.columns(2)
-                        with col_main1:
-                            st.markdown(
-                                f"""
-                                <div style='background: linear-gradient(145deg, #f0f8ff 0%, #e6f3ff 100%); padding: 15px; border-radius: 12px; border-left: 5px solid #0066cc;'>
-                                    <div style='font-weight: bold; color: #004080; margin-bottom: 8px;'>💧 Water Flux</div>
-                                    <div style='font-size: 2em; font-weight: 900; color: #0066cc;'>{pred.flux:.3f}</div>
-                                    <div style='font-size: 0.9em; color: #666; margin-top: 8px;'>±{pred.flux*0.05:.3f} (±5%)</div>
-                                </div>
-                                """,
-                                unsafe_allow_html=True,
-                            )
-                        with col_main2:
-                            st.markdown(
-                                f"""
-                                <div style='background: linear-gradient(145deg, #f0fff0 0%, #e6ffe6 100%); padding: 15px; border-radius: 12px; border-left: 5px solid #28a745;'>
-                                    <div style='font-weight: bold; color: #1e5f1e; margin-bottom: 8px;'>🛡️ Salt Rejection</div>
-                                    <div style='font-size: 2em; font-weight: 900; color: #28a745;'>{min(pred.salt_rejection, 100.0):.1f}%</div>
-                                    <div style='font-size: 0.9em; color: #666; margin-top: 8px;'>±{min(pred.salt_rejection, 100.0)*0.03:.1f}% (±3%)</div>
-                                </div>
-                                """,
-                                unsafe_allow_html=True,
-                            )
+                        col_r1, col_r2 = st.columns(2)
+                        with col_r1:
+                            st.markdown(f"**💧 Water Flux:** {pred.flux:.3f} ±{pred.flux*0.05:.3f}")
+                        with col_r2:
+                            st.markdown(f"**🛡️ Salt Rejection:** {min(pred.salt_rejection, 100.0):.1f}%")
                         
-                        new_row = {
-                            **base_row,
-                            "Pore Area (Å²)": a,
-                            "Salt Rejection (%)": min(pred.salt_rejection, 100.0),
-                            "Water Flux (molecule/ns)": pred.flux,
-                        }
-                        st.session_state.simulations = pd.concat(
-                            [st.session_state.simulations, pd.DataFrame([new_row])], ignore_index=True
-                        )
-                        st.info("📊 This inverse design has been automatically added to the Analysis & Reports table")
+                        new_row = {**base_row, "Pore Area (Å²)": a, "Salt Rejection (%)": min(pred.salt_rejection, 100.0), "Water Flux (molecule/ns)": pred.flux}
+                        st.session_state.simulations = pd.concat([st.session_state.simulations, pd.DataFrame([new_row])], ignore_index=True)
             except Exception as e:
-                st.error(f"❌ Error in inverse design: {str(e)}")
-                st.exception(e)
+                st.error(f"❌ Error: {str(e)}")
     
     def render_chat():
         st.subheader(t("nav_chat", st.session_state.lang))
         
         api_key_configured = False
-        api_key = None
-        
         api_key = os.environ.get("GROQ_API_KEY")
-        if api_key and len(api_key) > 10:
-            api_key_configured = True
-        
-        if not api_key_configured:
+        if not (api_key and len(api_key) > 10):
             try:
                 api_key = st.secrets.get("GROQ_API_KEY")
                 if api_key and len(api_key) > 10:
                     api_key_configured = True
-            except Exception:
+            except:
                 pass
+        else:
+            api_key_configured = True
         
         if not api_key_configured:
-            st.warning("""
-            ⚠️ **AI Chatbot Not Configured**
-            
-            To enable chatbot functionality, add `GROQ_API_KEY` to your Streamlit secrets.
-            Visit [Groq Console](https://console.groq.com/keys) to get an API key.
-            """)
-            
+            st.warning("⚠️ AI Chatbot not configured. Add GROQ_API_KEY to secrets.")
             for role, msg in st.session_state.chat:
                 with st.chat_message(role):
                     st.write(msg)
         else:
-            st.success("✅ AI Chatbot is ready!")
-            st.caption("Powered by Groq + RAG - Available in Arabic, French, and English")
-            
+            st.success("✅ AI Chatbot ready!")
             for role, msg in st.session_state.chat:
                 with st.chat_message(role):
                     st.write(msg)
             
-            prompt = st.chat_input("Ask about desalination, graphene membranes, or water treatment...")
-            
-            st.markdown("""
-            <div style="background-color: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
-                <p style="color: #1e3a8a; font-size: 0.9rem; margin: 0;">
-                    <strong>🤖 AI Assistant Notice:</strong> I am an AI assistant trained on molecular dynamics simulation data and scientific literature.
-                    While I strive to provide accurate information, please verify critical information through original sources.
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-            
+            prompt = st.chat_input("Ask about desalination...")
             if prompt:
                 st.session_state.chat.append(("user", prompt))
                 with st.chat_message("assistant"):
@@ -1110,111 +883,34 @@ def main():
                             st.write(resp.text)
                             st.session_state.chat.append(("assistant", resp.text))
                         except Exception as e:
-                            error_msg = f"❌ Sorry, I encountered an error: {str(e)}"
-                            st.write(error_msg)
-                            st.session_state.chat.append(("assistant", error_msg))
+                            st.session_state.chat.append(("assistant", f"❌ Error: {str(e)}"))
                 st.rerun()
     
     def render_about():
         st.markdown("""
-        <h1 style="color: #1e3a8a; font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 1rem;">
-            About Aqua.LA.Graph-Lite v1.0
-        </h1>
-        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; text-align: center; margin-bottom: 2rem;">
-            ML Web Tool for Monolayer Nanoporous Graphene Membranes
-        </h2>
-        """, unsafe_allow_html=True)
+        <h1 style="color: #1e3a8a; text-align: center;">About Aqua.LA.Graph-Lite v1.0</h1>
+        <h2 style="color: #1e3a8a; text-align: center; font-size: 1.4rem;">ML Web Tool for Monolayer Nanoporous Graphene Membranes</h2>
         
-        st.markdown("""
-        <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; border-left: 4px solid #1e3a8a;">
-            <h3 style="color: #1e3a8a; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem;">
-                Master's Final Project (PFE)
-            </h3>
-            <p style="color: #333; font-size: 1rem; margin-bottom: 0.3rem;">
-                Analytical Sciences, Quality & Environment (S.A.Q.E)
-            </p>
-            <p style="color: #333; font-size: 1rem; margin: 0;">
-                Faculty of Sciences, Mohammed V University, Rabat
-            </p>
+        <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin: 1.5rem 0; border-left: 4px solid #1e3a8a;">
+            <h3 style="color: #1e3a8a;">Master's Final Project (PFE)</h3>
+            <p>Analytical Sciences, Quality & Environment (S.A.Q.E)</p>
+            <p>Faculty of Sciences, Mohammed V University, Rabat</p>
         </div>
-        """, unsafe_allow_html=True)
         
-        st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.8rem;">
-            Project Overview
-        </h2>
-        <div style="color: #333; line-height: 1.6; font-size: 1rem;">
-            Water scarcity is one of the most pressing challenges of our time. Seawater desalination has become a strategic necessity.
-            Single-layer nanoporous graphene membranes promise exceptional water permeance and near-perfect salt rejection,
-            potentially revolutionizing desalination with dramatically lower energy consumption.
-
-            <span style="font-weight: 600; color: #1e3a8a;">Aqua.LA.Graph-Lite v1.0 was built to help break the computational barrier</span>
-            by enabling instant predictions without supercomputers.
+        <h2 style="color: #1e3a8a;">Project Overview</h2>
+        <p>Water scarcity demands innovative solutions. Single-layer nanoporous graphene membranes promise exceptional performance for desalination. Aqua.LA.Graph-Lite v1.0 enables instant predictions without supercomputers.</p>
+        
+        <h2 style="color: #1e3a8a;">How It Works</h2>
+        <p>Powered by CatBoost, trained on 460 data points from 12 peer-reviewed articles.</p>
+        
+        <div style="background-color: #fff3cd; padding: 1rem; border-radius: 10px; margin: 1.5rem 0;">
+            <p style="color: #856404;"><strong>Disclaimer:</strong> This is a research-support tool. Always verify results through established scientific methods.</p>
         </div>
-        """, unsafe_allow_html=True)
         
-        st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.8rem;">
-            How It Works
-        </h2>
-        <div style="color: #333; line-height: 1.6; font-size: 1rem;">
-            Powered by CatBoost, trained on 460 clean data points from 12 peer-reviewed articles.
-        </div>
-        """, unsafe_allow_html=True)
-        
-        col1, col2 = st.columns([1, 1])
-        with col1:
-            st.markdown("""
-            <div style="background-color: #e8f4fd; padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
-                <h3 style="color: #1e3a8a; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.8rem;">Input parameters (7):</h3>
-                <ul style="color: #333; line-height: 1.5; font-size: 0.95rem; margin: 0; padding-left: 1.2rem;">
-                    <li>Pore shape</li>
-                    <li>Pore area (Å²)</li>
-                    <li>Applied pressure (MPa)</li>
-                    <li>Pore chemistry</li>
-                    <li>Porosity (%)</li>
-                    <li>Temperature (°C)</li>
-                    <li>Feed salt concentration (ppm)</li>
-                </ul>
-            </div>
-            """, unsafe_allow_html=True)
-        with col2:
-            st.markdown("""
-            <div style="background-color: #e8f4fd; padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
-                <h3 style="color: #1e3a8a; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.8rem;">Predicted outputs (2):</h3>
-                <ul style="color: #333; line-height: 1.5; font-size: 0.95rem; margin: 0; padding-left: 1.2rem;">
-                    <li>Water flux (molecules/ns)</li>
-                    <li>Salt rejection (%)</li>
-                </ul>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.8rem;">
-            Important Disclaimer
-        </h2>
-        <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem;">
-            <p style="color: #856404; line-height: 1.6; font-size: 0.95rem; margin: 0;">
-                <strong>Aqua.LA.Graph-Lite v1.0 is a research-support tool, not a replacement for rigorous simulation or experiment.</strong><br>
-                Always verify critical results through established scientific methods.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.8rem;">
-            Supervisors & Student
-        </h2>
+        <h2 style="color: #1e3a8a;">Contact</h2>
         <p><strong>LAARAJ LAHCEN</strong> - Master S.A.Q.E, UM5 FSR Rabat</p>
-        <p>📧 lahcen_laaraj@um5.ac.ma | lahcenelaaraj37@gmail.com</p>
+        <p>📧 lahcen_laaraj@um5.ac.ma</p>
         <p><strong>Supervisors:</strong> Prof. S. EL HAJJAJI & Prof. Z. ZITI</p>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <h2 style="color: #1e3a8a; font-size: 1.4rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.8rem;">
-            Open Science
-        </h2>
-        <p>🔗 <a href="https://github.com/lahcenlaaraj37-alt" style="color: #1e3a8a; font-weight: 600;">GitHub Repository</a></p>
         """, unsafe_allow_html=True)
     
     # ============================================================
