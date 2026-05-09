@@ -13,3 +13,4 @@ python-dotenv
 groq
 sentence-transformers
 torch
+faiss-cpu
