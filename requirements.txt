@@ -10,4 +10,6 @@ plotly
 kaleido
 reportlab
 python-dotenv
-google-generativeai
+groq
+sentence-transformers
+torch
