@@ -41,7 +41,7 @@ st.set_page_config(
 )
 
 # ============================================================
-# === CSS GLOBAL AVEC STYLES RESPONSIVE POUR MOBILE ===
+# === CSS GLOBAL AVEC CORRECTION COMPLÈTE DU PROBLÈME DE MENU ===
 # ============================================================
 _APP_CSS = """
 <style>
@@ -60,7 +60,7 @@ _APP_CSS = """
         padding-top: 0 !important;
         padding-bottom: 1rem;
         max-width: 1200px;
-        margin-top: 120px !important;
+        margin-top: 140px !important;
         padding-top: 1rem !important;
     }
 
@@ -260,7 +260,18 @@ _APP_CSS = """
         font-weight: 700 !important;
     }
 
-    /* ===== Bouton Menu flottant - blanc sur fond bleu ===== */
+    /* ===== CORRECTION CRITIQUE : Cacher complètement le bouton Streamlit original ===== */
+    /* On le cache car il cause des problèmes de synchronisation et se fait couvrir par le header */
+    button[data-testid="collapsedControl"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        z-index: -9999 !important;
+    }
+
+    /* ===== Bouton Menu flottant - Style amélioré ===== */
     #floating-menu-btn {
         position: fixed;
         top: 15px;
@@ -273,44 +284,22 @@ _APP_CSS = """
         color: #1e3a8a !important;
         border: 2px solid #1e3a8a !important;
         border-radius: 8px !important;
-        padding: 7px 14px !important;
+        padding: 8px 16px !important;
         font-weight: 700 !important;
-        font-size: 0.95rem !important;
-        box-shadow: 0 3px 10px rgba(30, 58, 138, 0.2) !important;
+        font-size: 1rem !important;
+        box-shadow: 0 3px 10px rgba(30, 58, 138, 0.3) !important;
         cursor: pointer !important;
         letter-spacing: 0.3px !important;
-        transition: background 0.2s !important;
+        transition: all 0.2s ease !important;
+        min-width: 80px !important;
     }
 
     #floating-menu-btn button:hover {
-        background: #f8fafc !important;
+        background: #f0f4ff !important;
         border-color: #1e3a8a !important;
         color: #1e3a8a !important;
-    }
-
-    /* Déplacement du bouton Streamlit original en bas de l'écran */
-    button[data-testid="collapsedControl"] {
-        position: fixed !important;
-        bottom: 20px !important;
-        left: 15px !important;
-        top: auto !important;
-        z-index: 999998 !important;
-        background: #1e3a8a !important;
-        color: white !important;
-        border-radius: 8px !important;
-        border: 2px solid #93c5fd !important;
-        width: 42px !important;
-        height: 42px !important;
-        box-shadow: 0 4px 12px rgba(30, 58, 138, 0.4) !important;
-    }
-
-    button[data-testid="collapsedControl"]:hover {
-        background: #2c5282 !important;
-    }
-
-    button[data-testid="collapsedControl"] svg {
-        color: white !important;
-        fill: white !important;
+        box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4) !important;
+        transform: translateY(-1px) !important;
     }
 
     /* ============================================================ */
@@ -318,7 +307,7 @@ _APP_CSS = """
     /* ============================================================ */
     @media screen and (max-width: 768px) {
         .main .block-container {
-            margin-top: 80px !important;
+            margin-top: 100px !important;
             padding: 0.5rem !important;
             border-radius: 10px !important;
             max-width: 100% !important;
@@ -342,15 +331,9 @@ _APP_CSS = """
         }
 
         #floating-menu-btn button {
-            padding: 5px 10px !important;
-            font-size: 0.85rem !important;
-        }
-
-        button[data-testid="collapsedControl"] {
-            bottom: 15px !important;
-            left: 10px !important;
-            width: 36px !important;
-            height: 36px !important;
+            padding: 6px 12px !important;
+            font-size: 0.9rem !important;
+            min-width: 70px !important;
         }
 
         .stColumns > div {
@@ -365,7 +348,7 @@ _APP_CSS = """
         /* Header responsive */
         .mobile-header {
             padding: 0.8rem 1rem !important;
-            padding-left: 50px !important;
+            padding-left: 60px !important;
             flex-direction: column !important;
             align-items: flex-start !important;
             gap: 0.5rem !important;
@@ -380,6 +363,10 @@ _APP_CSS = """
         }
 
         .mobile-header .header-dev {
+            font-size: 0.7rem !important;
+        }
+
+        .mobile-header .header-dev-info {
             font-size: 0.7rem !important;
         }
 
@@ -398,7 +385,7 @@ _APP_CSS = """
 
     @media screen and (max-width: 480px) {
         .main .block-container {
-            margin-top: 70px !important;
+            margin-top: 85px !important;
             padding: 0.3rem !important;
         }
 
@@ -416,16 +403,10 @@ _APP_CSS = """
         }
 
         #floating-menu-btn button {
-            padding: 4px 8px !important;
-            font-size: 0.8rem !important;
+            padding: 5px 10px !important;
+            font-size: 0.85rem !important;
             border-radius: 6px !important;
-        }
-
-        button[data-testid="collapsedControl"] {
-            bottom: 10px !important;
-            left: 8px !important;
-            width: 32px !important;
-            height: 32px !important;
+            min-width: 60px !important;
         }
     }
 </style>
@@ -493,101 +474,154 @@ def _chemistry_picker(chemistry_display: list[str]) -> str:
 
 
 # ============================================================
-# === GESTION DE LA BARRE LATÉRALE ===
+# === GESTION DE LA BARRE LATÉRALE - SOLUTION COMPLÈTE ===
 # ============================================================
 def sidebar_toggle():
-    """Crée le bouton flottant ☰ Menu et gère l'affichage/masquage de la sidebar."""
+    """
+    Gère l'affichage de la barre latérale via notre propre bouton ☰ Menu.
+    Le bouton Streamlit original est complètement caché pour éviter les conflits.
+    """
     
     # Initialiser l'état si nécessaire
     if 'sidebar_open' not in st.session_state:
         st.session_state.sidebar_open = True
     
-    # Masquer la barre latérale avec CSS lorsqu'elle est fermée
+    # Appliquer le CSS pour masquer/afficher la sidebar selon l'état
     if not st.session_state.sidebar_open:
         st.markdown(
-            """<style>section[data-testid="stSidebar"] {display: none !important;}</style>""",
+            """<style>
+            section[data-testid="stSidebar"] {
+                display: none !important;
+                visibility: hidden !important;
+                width: 0 !important;
+                min-width: 0 !important;
+                max-width: 0 !important;
+                overflow: hidden !important;
+            }
+            section[data-testid="stSidebar"] * {
+                display: none !important;
+            }
+            </style>""",
+            unsafe_allow_html=True,
+        )
+    else:
+        # S'assurer que la sidebar est visible
+        st.markdown(
+            """<style>
+            section[data-testid="stSidebar"] {
+                display: flex !important;
+                visibility: visible !important;
+                width: auto !important;
+                min-width: auto !important;
+                max-width: none !important;
+                overflow: visible !important;
+            }
+            section[data-testid="stSidebar"] * {
+                display: initial !important;
+            }
+            </style>""",
             unsafe_allow_html=True,
         )
     
-    # JavaScript pour synchroniser le bouton Streamlit original avec notre bouton Menu
+    # JavaScript pour gérer la sidebar de façon robuste
     st.markdown(
         """
         <script>
         (function() {
-            function syncSidebarState() {
+            function manageSidebar() {
                 const sidebar = document.querySelector('section[data-testid="stSidebar"]');
-                const stBtn = document.querySelector('button[data-testid="collapsedControl"]');
-                
-                if (!sidebar || !stBtn) {
-                    setTimeout(syncSidebarState, 300);
+                if (!sidebar) {
+                    setTimeout(manageSidebar, 200);
                     return;
                 }
                 
-                // Vérifier si la sidebar est visible
-                const sidebarVisible = sidebar.offsetParent !== null;
-                const currentState = """ + str(st.session_state.sidebar_open).lower() + """;
+                // Récupérer l'état actuel depuis Python (injecté via data attribute)
+                const shouldBeOpen = sidebar.getAttribute('data-sidebar-open') === 'true';
                 
-                // Si l'état est incohérent, cliquer sur notre bouton pour synchroniser
-                if (sidebarVisible !== currentState) {
-                    const menuBtn = document.querySelector('#floating-menu-btn button');
-                    if (menuBtn) {
-                        menuBtn.click();
-                    }
+                if (shouldBeOpen) {
+                    // Forcer l'affichage de la sidebar
+                    sidebar.style.display = 'flex';
+                    sidebar.style.visibility = 'visible';
+                    sidebar.style.width = '';
+                    sidebar.style.minWidth = '';
+                    sidebar.style.maxWidth = '';
+                    sidebar.style.overflow = 'visible';
+                    
+                    // Afficher tous les enfants
+                    const allChildren = sidebar.querySelectorAll('*');
+                    allChildren.forEach(function(child) {
+                        child.style.display = '';
+                    });
+                } else {
+                    // Cacher complètement la sidebar
+                    sidebar.style.display = 'none';
+                    sidebar.style.visibility = 'hidden';
+                    sidebar.style.width = '0px';
+                    sidebar.style.minWidth = '0px';
+                    sidebar.style.maxWidth = '0px';
+                    sidebar.style.overflow = 'hidden';
+                    
+                    // Cacher tous les enfants
+                    const allChildren = sidebar.querySelectorAll('*');
+                    allChildren.forEach(function(child) {
+                        child.style.display = 'none';
+                    });
                 }
-                
-                // Surveiller le bouton Streamlit original
-                stBtn.addEventListener('click', function() {
-                    setTimeout(function() {
-                        const sidebarAfter = document.querySelector('section[data-testid="stSidebar"]');
-                        const sidebarVisibleAfter = sidebarAfter ? sidebarAfter.offsetParent !== null : true;
-                        const menuBtn = document.querySelector('#floating-menu-btn button');
-                        
-                        if (menuBtn) {
-                            // Cliquer pour synchroniser l'état
-                            menuBtn.click();
-                        }
-                    }, 300);
-                });
             }
             
+            // Exécuter immédiatement et périodiquement pour contrer Streamlit
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', function() {
-                    setTimeout(syncSidebarState, 500);
+                    setTimeout(manageSidebar, 100);
+                    setInterval(manageSidebar, 500);
                 });
             } else {
-                setTimeout(syncSidebarState, 500);
+                setTimeout(manageSidebar, 100);
+                setInterval(manageSidebar, 500);
             }
-            
-            // Surveillance continue pour détecter les changements
-            setInterval(function() {
-                const sidebar = document.querySelector('section[data-testid="stSidebar"]');
-                if (sidebar) {
-                    const sidebarVisible = sidebar.offsetParent !== null;
-                    // Stocker l'état actuel dans un attribut data
-                    const lastState = sidebar.getAttribute('data-visible');
-                    const newState = sidebarVisible ? 'true' : 'false';
-                    
-                    if (lastState !== null && lastState !== newState) {
-                        // L'état a changé, synchroniser
-                        const menuBtn = document.querySelector('#floating-menu-btn button');
-                        if (menuBtn) {
-                            menuBtn.click();
-                        }
-                    }
-                    sidebar.setAttribute('data-visible', newState);
-                }
-            }, 1000);
         })();
         </script>
         """,
         unsafe_allow_html=True,
     )
     
-    # Bouton flottant ☰ Menu (blanc sur fond bleu)
+    # Définir l'attribut data-sidebar-open sur la sidebar pour le JavaScript
+    sidebar_state = "true" if st.session_state.sidebar_open else "false"
+    st.markdown(
+        f"""
+        <script>
+        (function() {{
+            function setSidebarState() {{
+                const sidebar = document.querySelector('section[data-testid="stSidebar"]');
+                if (sidebar) {{
+                    sidebar.setAttribute('data-sidebar-open', '{sidebar_state}');
+                }} else {{
+                    setTimeout(setSidebarState, 200);
+                }}
+            }}
+            if (document.readyState === 'loading') {{
+                document.addEventListener('DOMContentLoaded', function() {{
+                    setTimeout(setSidebarState, 100);
+                }});
+            }} else {{
+                setTimeout(setSidebarState, 100);
+            }}
+        }})();
+        </script>
+        """,
+        unsafe_allow_html=True,
+    )
+    
+    # Bouton flottant ☰ Menu
     st.markdown('<div id="floating-menu-btn">', unsafe_allow_html=True)
-    if st.button("☰ Menu", key="toggle_sb_unique", help="Afficher/Masquer le menu"):
+    
+    # Texte du bouton selon l'état
+    btn_text = "✕ Fermer" if st.session_state.sidebar_open else "☰ Menu"
+    
+    if st.button(btn_text, key="toggle_sb_unique", help="Afficher/Masquer le menu de navigation"):
         st.session_state.sidebar_open = not st.session_state.sidebar_open
         st.rerun()
+    
     st.markdown('</div>', unsafe_allow_html=True)
 
 
@@ -655,7 +689,7 @@ def main():
     # Header
     st.markdown(
         """
-        <div class="mobile-header" style="position: fixed; top: 0; left: 0; right: 0; width: 100%; background: linear-gradient(135deg, #1e3a8a 0%, #2c5282 100%); padding: 1.5rem 2rem; padding-left: 80px; z-index: 9999; box-shadow: 0 4px 20px rgba(30, 58, 138, 0.3); display: flex; justify-content: space-between; align-items: center;">
+        <div class="mobile-header" style="position: fixed; top: 0; left: 0; right: 0; width: 100%; background: linear-gradient(135deg, #1e3a8a 0%, #2c5282 100%); padding: 1.5rem 2rem; padding-left: 100px; z-index: 9998; box-shadow: 0 4px 20px rgba(30, 58, 138, 0.3); display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; flex-direction: column; justify-content: center;">
                 <div class="header-title" style="font-size: 2.2rem; font-weight: 800; color: #FFFFFF; line-height: 1.2; margin-bottom: 0.25rem;">
                     🌊 Aqua.LA.Graph-Lite v1.0
@@ -1373,7 +1407,6 @@ def main():
             
             prompt = st.chat_input("Ask about desalination, graphene membranes, or water treatment...")
             
-            # AI Assistant Disclaimer
             st.markdown("""
             <div style="background-color: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
                 <p style="color: #1e3a8a; font-size: 0.9rem; margin: 0; line-height: 1.4;">
@@ -1399,7 +1432,6 @@ def main():
                 st.rerun()
     
     def render_about():
-        # Header with medium square images at top corners
         try:
             img1_b64 = base64.b64encode(open("assets/Image1.jpg", "rb").read()).decode()
         except:
@@ -1418,7 +1450,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # Main title
         st.markdown("""
         <h1 style="color: #1e3a8a; font-size: 2.5rem; font-weight: 700; text-align: center; margin-bottom: 1rem;">
             About Aqua.LA.Graph-Lite v1.0
@@ -1431,7 +1462,6 @@ def main():
         </h2>
         """, unsafe_allow_html=True)
         
-        # Academic info
         st.markdown("""
         <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border-left: 4px solid #1e3a8a;">
             <h3 style="color: #1e3a8a; font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem;">
@@ -1446,7 +1476,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # Project Overview
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Project Overview
@@ -1469,7 +1498,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # Our Mission
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Our Mission
@@ -1488,7 +1516,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # How It Works
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             How It Works & Model Performance
@@ -1503,7 +1530,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # Input/Output sections
         col1, col2 = st.columns([1, 1])
         
         with col1:
@@ -1548,7 +1574,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # Important Disclaimer
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Important Disclaimer
@@ -1576,7 +1601,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # Supervisors & Student
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Supervisors & Student
@@ -1600,7 +1624,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # Open Science & Reproducibility
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Open Science & Reproducibility
@@ -1632,7 +1655,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # AI & Future of Research
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             A Note on AI & the Future of Research
@@ -1648,7 +1670,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # Acknowledgments
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Acknowledgments
@@ -1662,7 +1683,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # Student Developer Profile
         try:
             me_b64 = base64.b64encode(open("assets/Me.jpeg", "rb").read()).decode()
         except:
