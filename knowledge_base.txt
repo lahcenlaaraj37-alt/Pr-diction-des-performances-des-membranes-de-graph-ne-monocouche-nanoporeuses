@@ -1,0 +1,962 @@
+================================================================
+KNOWLEDGE BASE — GRAPHENE MEMBRANE DESALINATION PREDICTOR
+Project: PFE Master — Analytical, Environmental & Quality Sciences
+Authors: Laaraj & Lahcen — FSR 2026
+App: https://pfe-fsr-graphene-laaraj-lahcen-2026.streamlit.app/
+================================================================
+
+================================================================
+# AQUA.LA.GRAPH-LITE V1.0 - APPLICATION DETAILS
+================================================================
+
+Aqua.LA.Graph-Lite v1.0 is a web-based predictive tool for graphene membrane 
+desalination performance developed as a Master's final year project (PFE) at 
+Mohammed V University, Faculty of Sciences, Rabat (UM5-FSR).
+
+DEVELOPER:
+- Name: Laaraj Lahcen
+- Role: Master S.A.Q.E student (Analytical, Environmental & Quality Sciences)
+- Additional Position: Educational supervisor at Ministry of Education
+- Specialization: Laboratory preparation and educational supervision
+- Email: lahcen_laaraj@um5.ac.ma | lahcenelaaraj37@gmail.com
+
+SUPERVISION:
+- Prof. S. EL HAJJAJI - Faculty of Sciences, Mohammed V University, Rabat
+- Prof. Z. ZITI - Faculty of Sciences, Mohammed V University, Rabat
+
+INSTITUTION:
+- University: Mohammed V University (UM5)
+- Faculty: Faculty of Sciences (FSR)
+- Department: Chemistry Department
+- Program: Master S.A.Q.E (Analytical, Environmental & Quality Sciences)
+- Location: Rabat, Morocco
+
+PROJECT TYPE:
+- Academic Project: Master's Final Year Project (PFE)
+- Focus: Water scarcity solutions using graphene membrane technology
+- Target Regions: North Africa and Arabian Gulf
+- Year: 2026
+
+TECHNICAL DETAILS:
+- Algorithm: CatBoost (Categorical Boosting)
+- Training Data: 460 molecular dynamics simulation samples
+- Data Source: 12 peer-reviewed scientific publications
+- Performance: Salt Rejection (%) and Water Flux (molecules/nanosecond)
+- Development Tools: Python, Orange Data Mining, Jupyter Notebook, Anaconda
+
+================================================================
+
+================================================================
+# PROJECT OVERVIEW
+================================================================
+
+This application predicts the performance of single-layer nanoporous graphene (SLNG) membranes
+for seawater desalination using machine learning models trained on molecular dynamics (MD)
+simulation data extracted from 12 peer-reviewed scientific publications.
+
+The tool was designed to replace expensive and time-consuming molecular dynamics simulations
+(which require supercomputers and days of computation) with an instant, free, web-based
+prediction tool accessible to researchers worldwide.
+
+The project was developed as a Master's final year project (PFE) in Analytical,
+Environmental and Quality Sciences (Chemistry), focusing on water scarcity solutions
+for arid and semi-arid regions, particularly North Africa and the Arabian Gulf.
+
+The models predict two key membrane performance indicators:
+1. Salt Rejection (%) — how well the membrane blocks salt ions
+2. Water Flux (molecules/ns) — how much water passes through the membrane
+
+The machine learning algorithm used is CatBoost (Categorical Boosting), which was
+selected after systematic comparison with XGBoost, Random Forest, SVM, Decision Tree,
+and Linear Regression on both cross-validation and train/test protocols.
+
+================================================================
+# WATER SCARCITY CONTEXT
+================================================================
+
+Water scarcity is one of the most critical global challenges of the 21st century.
+Only 2.5% of Earth's water is fresh water, and less than 1% is directly accessible.
+Global water demand has increased sixfold during the 20th century.
+
+According to UN-Water 2023, approximately 2.2 billion people lack access to safely
+managed drinking water, and 4 billion people face severe water scarcity at least one
+month per year.
+
+The most affected regions include:
+- Arabian Gulf countries (Saudi Arabia, UAE, Kuwait, Qatar, Bahrain, Oman): less than
+  100 m³ of renewable freshwater per person per year, far below the 500 m³ water
+  poverty threshold. These countries depend on desalination for over 70% of their
+  drinking water.
+- North Africa (Algeria, Morocco, Tunisia, Egypt): rapidly depleting groundwater
+  and river resources combined with strong demographic growth.
+- South Asia (India, Pakistan): high and worsening water stress.
+- Southern Europe (Mediterranean): moderate to high water stress.
+
+Seawater desalination is one of the most promising long-term solutions to water scarcity.
+Average seawater salinity is 35 g/L (35,000 ppm), and the goal is to reduce total
+dissolved solids (TDS) below 500 ppm for drinking water according to WHO standards.
+
+================================================================
+# DESALINATION TECHNOLOGIES — COMPARISON
+================================================================
+
+Current desalination technologies fall into two main families:
+
+THERMAL PROCESSES:
+- Multi-Stage Flash (MSF): energy consumption 10–16 kWh/m³, robust but inefficient
+- Multi-Effect Distillation (MED): energy consumption 5–8 kWh/m³, often coupled with
+  power plants for co-generation
+- Vapor Compression (VC): 7–12 kWh/m³, mechanical or thermal compression
+
+MEMBRANE PROCESSES:
+- Reverse Osmosis (RO): energy consumption 3–5 kWh/m³, dominates the global market
+  (~65% of installed capacity), uses thin-film composite polyamide membranes
+- Nanofiltration (NF): 2–4 kWh/m³, semi-selective filtration
+- Electrodialysis (ED): 1–3 kWh/m³, ion migration under electric field
+
+Reverse osmosis (RO) is the dominant technology but suffers from:
+- Biofouling and mineral scaling
+- Chlorine degradation of polyamide membranes
+- Flux-selectivity trade-off limitation
+- Energy consumption still too high for widespread deployment in developing countries
+
+This is why next-generation membrane materials like graphene are being researched.
+
+================================================================
+# GRAPHENE — STRUCTURE AND PROPERTIES
+================================================================
+
+Graphene is a two-dimensional material consisting of a single atomic plane of carbon
+atoms arranged in a hexagonal honeycomb lattice with a C-C bond distance of 1.42 Å.
+
+It was first isolated in 2004 by Andre Geim and Konstantin Novoselov at the University
+of Manchester using mechanical exfoliation (the scotch tape method). They received the
+Nobel Prize in Physics in 2010 for this discovery.
+
+Key properties of graphene:
+- Young's modulus: ~1 TPa (approximately 5 times stronger than steel)
+- Ultimate tensile strength: ~130 GPa (strongest known material)
+- Thickness: ~0.335 nm (one atomic layer, 100,000 times thinner than a human hair)
+- Thermal conductivity: 3000–5000 W/(m·K), about 10 times better than copper
+- Carrier mobility: ~200,000 cm²/(V·s), ~100 times better than silicon
+- Specific surface area: ~2630 m²/g
+- Intrinsic impermeability: perfectly impermeable to all gases and liquids when unpunched
+- Optical transmittance: ~97.7% (nearly transparent)
+
+Graphene synthesis methods:
+- Mechanical exfoliation: highest quality crystals, small quantities, research only
+- Chemical Vapor Deposition (CVD) on copper or nickel substrates: best method for
+  large-scale high-quality single-layer graphene production
+- Chemical exfoliation from graphite oxide (Hummers method): produces graphene oxide
+  (GO) in large quantities, less crystalline quality
+
+================================================================
+# SINGLE-LAYER NANOPOROUS GRAPHENE (SLNG) MEMBRANES
+================================================================
+
+Single-layer nanoporous graphene (SLNG) membranes represent the most promising
+next-generation approach for seawater desalination.
+
+The working principle is simple but powerful:
+Nanometer-sized pores are created in a single graphene sheet. These pores allow
+water molecules (kinetic diameter ~2.75 Å) to pass through while blocking dissolved
+salt ions (hydrated Na⁺: ~7.2 Å, hydrated Cl⁻: ~6.6 Å).
+
+Why SLNG membranes are potentially superior to polymer RO membranes:
+- Atomic thickness (~0.335 nm) nearly eliminates hydraulic resistance
+- Theoretically 2–3 orders of magnitude higher water flux than commercial RO membranes
+- Theoretical salt rejection up to 100% for small enough pores
+- No chemical degradation (unlike polyamide membranes)
+- Extremely thin membrane = minimal pressure drop
+
+THREE APPROACHES to graphene-based desalination exist:
+
+1. Graphene-Polymer Hybrid Membranes:
+   Graphene or GO integrated into polymer matrices (polyamide, polyethersulfone, PVDF).
+   Improves flux by 20–100% compared to commercial RO membranes. Technology Readiness
+   Level (TRL) 6–8, pilot applications exist.
+
+2. Multilayer Graphene Oxide (GO) Membranes:
+   Stacked GO sheets with controlled interlayer spacing (6–10 Å).
+   Water transport through 2D nanochannels between layers. TRL 5–7, advanced prototypes
+   exist including at the National Graphene Institute (Manchester, UK).
+
+3. Single-Layer Nanoporous Graphene (SLNG) — THIS PROJECT:
+   Single perforated graphene sheet with precisely sized nanopores. TRL 2–4, currently
+   studied almost exclusively through molecular dynamics simulations. This is the focus
+   of this project and this prediction tool.
+
+Current challenges for SLNG membranes:
+1. Computational barrier: MD simulations require supercomputers (100–10,000 CPU/GPU
+   cores), take days to weeks, and require specialized expertise in LAMMPS, NAMD, or
+   GROMACS software. This tool aims to solve this problem.
+2. Manufacturing barrier: Perforating a graphene sheet the size of a football field
+   with uniform nanopores invisible to the naked eye remains an engineering challenge,
+   though ion bombardment and plasma etching techniques are advancing rapidly.
+
+================================================================
+# MEMBRANE INPUTS — DETAILED EXPLANATION
+================================================================
+
+The prediction model uses 7 input parameters. These are exactly the same parameters
+used in molecular dynamics simulation software (LAMMPS, NAMD, GROMACS).
+
+--- INPUT 1: GEOMETRY (Pore Shape) ---
+
+Geometry refers to the shape of the nanopores created in the graphene membrane.
+It is a categorical variable with 5 possible values in the dataset:
+
+- Hexagonal: Most common geometry in the literature (69.2% of dataset). Pores arranged
+  in a hexagonal pattern matching the graphene crystal structure. Provides good balance
+  between flux and selectivity.
+
+- Circular: Second most common geometry (27.3% of dataset). Circular pores are often
+  used in MD simulations for their symmetry and ease of parameterization. Slightly
+  different transport characteristics compared to hexagonal.
+
+- Ozark: Less common geometry (1.3% of dataset). Derived from specific pore creation
+  methods, named after specific computational studies.
+
+- Triangular: Rare geometry (1.1% of dataset). Triangular pores have sharp corners
+  that can influence ion exclusion differently from circular or hexagonal pores.
+
+- Rhombic: Rare geometry (1.1% of dataset). Diamond-shaped pores, studied in
+  comparative geometry analyses.
+
+The geometry affects how water molecules and ions interact with the pore edges, the
+steric exclusion of ions, and the overall transport efficiency. Hexagonal geometry
+typically offers the best combination of flux and selectivity in the published literature.
+
+--- INPUT 2: PORE AREA (Å²) ---
+
+Pore area represents the cross-sectional area of a single nanopore in the graphene
+membrane, measured in square Angstroms (Å²).
+
+Dataset range: 0.58 Å² to 205.3 Å²
+Dataset mean: 51.8 ± 40.8 Å²
+Dataset median: 44.0 Å²
+Dataset quartiles: Q1 = 23.1 Å², Q3 = 63.6 Å²
+
+Physical meaning:
+- 1 Å = 0.1 nanometer = 0.0000000001 meter
+- A pore area of 24 Å² roughly corresponds to a circular pore of diameter ~5.5 Å
+- Water molecule kinetic diameter: ~2.75 Å (area ≈ 5.9 Å²)
+- Hydrated Na⁺ ion diameter: ~7.2 Å (area ≈ 40.7 Å²)
+- Hydrated Cl⁻ ion diameter: ~6.6 Å (area ≈ 34.2 Å²)
+
+Effect on performance:
+- Pore area is the MOST INFLUENTIAL parameter on water flux.
+- Larger pore area = much higher water flux (approximately linear relationship).
+- Larger pore area = lower salt rejection (ions can pass through larger openings).
+- For 100% salt rejection, pore area must be small enough to exclude hydrated ions.
+- There is a critical threshold (~24–40 Å²) below which NaCl rejection approaches 100%.
+- Above this threshold, salt rejection drops rapidly with increasing pore size.
+
+The pore area directly determines whether a membrane is a desalination membrane
+(high rejection, lower flux) or a water purification membrane (high flux, partial rejection).
+
+--- INPUT 3: APPLIED PRESSURE (MPa) ---
+
+Applied pressure is the transmembrane pressure driving water through the graphene
+nanopores, measured in megapascals (MPa).
+
+Dataset range: 1 MPa to 2500 MPa
+Dataset mean: 239.5 ± 446.6 MPa
+Dataset median: 100 MPa
+
+Important note: In MD simulations, pressures of 100–2500 MPa are commonly used
+because simulation boxes are extremely small (nanometer scale) and require high
+pressure to observe statistically significant water transport within simulation
+time scales (nanoseconds). Real industrial RO desalination operates at 5–8 MPa.
+The model has learned the relationship between pressure and flux across the full
+simulation pressure range.
+
+Effect on performance:
+- Higher pressure = significantly higher water flux.
+- The relationship between pressure and flux is approximately linear for most pore
+  sizes and chemistries.
+- Pressure has a small positive effect on salt rejection because faster water transport
+  dilutes the concentration polarization layer near the membrane.
+- Very high pressures (>500 MPa in simulation) can cause structural stress on the
+  graphene lattice, which is accounted for in the model through the training data.
+
+Physical interpretation: Pressure overcomes the osmotic pressure of the feed solution
+and provides the driving force for water to flow through the nanopores against the
+osmotic gradient. For seawater (35,000 ppm NaCl), the osmotic pressure is approximately
+27 bar = 2.7 MPa.
+
+--- INPUT 4: FEED CONCENTRATION (ppm) ---
+
+Feed concentration is the salt concentration in the water that enters the membrane
+(the feed solution), measured in parts per million (ppm) of NaCl equivalent.
+
+Dataset range: 0 ppm to 201,670 ppm
+Dataset mean: 82,304 ± 56,678 ppm
+Dataset median: 58,440 ppm
+
+Reference concentrations for context:
+- Drinking water (WHO): < 500 ppm TDS
+- Brackish water: 1,000 – 10,000 ppm
+- Seawater (standard): ~35,000 ppm (3.5% NaCl)
+- Concentrated seawater: ~58,440 ppm (used in many MD simulations)
+- Hypersaline brine: 100,000 – 201,670 ppm (used in extreme MD simulations)
+
+Effect on performance:
+- Higher salt concentration = slightly lower water flux (higher osmotic pressure
+  opposing water transport).
+- Higher salt concentration = slightly higher salt rejection percentage because the
+  concentration gradient creates additional osmotic back-pressure on ions.
+- Higher salt concentration increases the ion-pore interaction frequency, which can
+  affect transport selectivity at the molecular level.
+- The competition between Na⁺ and Cl⁻ ions for pore passage is concentration-dependent.
+
+The feed concentration parameter allows the model to adapt predictions for different
+water sources: brackish water wells, standard seawater, concentrated industrial brines.
+
+--- INPUT 5: TEMPERATURE (°C) ---
+
+Temperature is the operating temperature of the desalination system, measured in
+degrees Celsius (°C).
+
+Dataset range: 2°C to 77°C
+Dataset mean: 32.9 ± 14.9°C
+Dataset median: 27°C (most MD simulations run at ambient temperature)
+
+Effect on performance:
+- Higher temperature = higher water flux.
+  Reason: Water viscosity decreases with temperature (less resistance to flow).
+  Also, water molecule thermal kinetic energy increases, improving transport
+  through nanopores.
+- Higher temperature = slightly lower salt rejection.
+  Reason: More energetic ions can overcome electrostatic or steric barriers more easily.
+- The temperature effect on flux is significant but secondary to pore area and pressure.
+- At 27°C (300K), water viscosity is approximately 0.85 mPa·s.
+- At 77°C (350K), water viscosity drops to approximately 0.37 mPa·s — less than half.
+
+In real seawater desalination plants, feed water temperature varies with season and
+geography: 15–20°C in temperate regions, 28–35°C in tropical/Gulf regions.
+
+--- INPUT 6: PORE CHEMISTRY (Functionalization) ---
+
+Pore chemistry (also called functionalization) refers to the chemical groups attached
+to the carbon atoms at the edges of the nanopores in the graphene membrane.
+It is a categorical variable.
+
+When pores are created in graphene (by ion bombardment, plasma etching, or oxidation),
+the carbon atoms at the pore edges are chemically unsaturated and must be terminated
+with functional groups.
+
+Available values in the dataset (18 distinct chemistries):
+
+PRISTINE / UNFUNCTIONALIZED:
+- Pristine: Pore edges left without specific functionalization (143 samples, 30.8%).
+  Carbon atoms at pore edges are in their natural state. Moderate flux and rejection.
+
+HYDROGEN-BASED:
+- H (Hydrogen-terminated): Pore edges terminated with hydrogen atoms (114 samples, 24.5%).
+  Hydrophobic character. Good balance of flux and salt rejection. One of the most
+  studied functionalizations in the literature (Cohen-Tanugi & Grossman 2012).
+
+HYDROXYL-BASED:
+- OH (Hydroxyl-terminated): Pore edges terminated with -OH groups (96 samples, 20.6%).
+  Hydrophilic character. Higher water flux than H-terminated pores due to
+  water-OH affinity. Slightly lower salt rejection for same pore size. Most favorable
+  for maximizing water throughput.
+
+SILICON-BASED:
+- SiH2 (Silicon dihydride): Silicon atoms at pore edges with two hydrogen atoms
+  (21 samples). Creates specific steric and electronic effects on ion transport.
+- Si(OH)2 (Silicon dihydroxide): Silicon with two hydroxyl groups (21 samples).
+  Combines silicon steric effects with hydroxyl hydrophilicity.
+- Si: Pure silicon termination (6 samples). Creates rigid steric barrier.
+
+NITROGEN-BASED (charged/polar):
+- NH (Amino): -NH group at pore edges (18 samples). Slightly positive charge character.
+  Can repel cations (Na⁺) through electrostatic interaction.
+- N (Nitrogen): Nitrogen atom substitution at pore edges (7 samples). Creates strong
+  electronic effects, modifies ion exclusion significantly.
+- NO (Nitrogen-oxygen): -NO groups at pore edges (7 samples). Creates mixed
+  steric and electrostatic effects.
+
+FLUORINE-BASED:
+- FH (Fluorine-hydrogen mixed): Alternating F and H at pore edges (12 samples).
+  Fluorine creates strong electronegativity that repels anions (Cl⁻). Can improve
+  salt rejection through electrostatic exclusion in addition to size exclusion.
+
+ORGANIC:
+- 2-Methyl, 4-Methyl: Methyl groups (-CH3) at pore edges. Create steric bulkiness
+  that modifies pore effective diameter.
+- 1-Ethyl, 2-Ethyl: Ethyl groups (-C2H5). Larger steric bulk than methyl.
+- 4F4H, 8F8H: Mixed fluorine-hydrogen organic terminations.
+- B (Boron): Boron termination, creates electron-deficient pore edges.
+- COO⁻ (Carboxylate): Negatively charged group. Strong electrostatic repulsion
+  of anions (Cl⁻), particularly effective at high pH.
+
+Summary of chemistry effects:
+- OH functionalization maximizes water flux (hydrophilic, attracts water)
+- H functionalization offers the best studied flux-rejection balance
+- Charged groups (N, NO, FH, COO⁻) improve ion rejection through electrostatics
+- Bulky organic groups (methyl, ethyl) modify effective pore size sterically
+- Si-based groups create unique steric profiles different from carbon-based edges
+
+--- INPUT 7: POROSITY (%) ---
+
+Porosity represents the percentage of the total membrane area that consists of
+nanopores (empty space) rather than solid graphene.
+
+Dataset range: 0.029% to 70.29%
+Dataset mean: 9.5 ± 13.1%
+Dataset median: 5.29%
+Dataset quartiles: Q1 = 2.56%, Q3 = 10.0%
+
+Physical meaning:
+- Porosity = (total pore area / total membrane area) × 100
+- A porosity of 1% means 1% of the graphene sheet is perforated with nanopores
+- A porosity of 50% means half the membrane is pores — very high, approaching
+  structural limits of the graphene sheet
+
+Effect on performance:
+- Higher porosity = proportionally higher water flux (more pores = more water passages)
+- Higher porosity = slightly lower salt rejection for very high porosities because
+  pore-to-pore interactions can create transport pathways for ions
+- The relationship between porosity and flux is approximately linear at low porosities
+- At very high porosities (>30%), the structural integrity of the graphene sheet
+  is compromised and performance may deviate from the linear model
+- Real-world achievable porosities using current fabrication techniques:
+  typically 0.1–5% for ion bombardment, up to 15–20% for plasma etching
+
+Porosity is a critical engineering parameter because it determines the membrane
+productivity per unit area, which directly impacts the economic viability of the
+desalination plant (capital cost per unit of water produced).
+
+================================================================
+# MEMBRANE OUTPUTS — DETAILED EXPLANATION
+================================================================
+
+--- OUTPUT 1: SALT REJECTION (%) ---
+
+Salt rejection is the primary performance indicator of a desalination membrane.
+It measures the percentage of salt ions that are blocked by the membrane and do not
+pass through to the permeate (product water) side.
+
+Formula: Salt Rejection (%) = (1 - C_permeate / C_feed) × 100
+
+Where:
+- C_permeate = salt concentration in the water that passed through the membrane
+- C_feed = salt concentration in the feed water entering the membrane
+
+Dataset statistics:
+- Minimum: 1.29% (essentially no rejection — large pores)
+- Maximum: 100% (perfect rejection — very small pores or charged pores)
+- Mean: 87.13%
+- Median: 97.14%
+- Standard deviation: 21.0%
+
+Interpretation guidelines:
+- 100% salt rejection: Perfect — no ions pass through. Typical for pores smaller
+  than the hydrated ion diameter with appropriate chemistry.
+- >99.5% salt rejection: Excellent — comparable to commercial high-performance RO
+  membranes (e.g., Dow FILMTEC SW30HR, Toray TM820).
+- 95–99.5% salt rejection: Good — suitable for most drinking water applications
+  if starting from standard seawater (product water TDS < 1750 ppm from 35,000 ppm feed).
+- 80–95% salt rejection: Moderate — may require a second pass or post-treatment.
+- <80% salt rejection: Poor — not suitable for drinking water production from seawater.
+
+The dominant mechanisms of salt rejection in SLNG membranes are:
+1. Steric exclusion: Hydrated ions are physically too large to pass through small pores
+2. Electrostatic exclusion: Charged functional groups repel ions electrostatically
+3. Hydrodynamic exclusion: At high water flux, fast water transport carries more
+   water relative to ion diffusion
+
+The model predicts this value directly as a percentage between 0 and 100.
+
+--- OUTPUT 2: WATER FLUX (molecules/ns) ---
+
+Water flux measures the transport rate of water molecules through the graphene
+membrane, expressed in molecules per nanosecond (molecules/ns) as used in MD simulations.
+
+Dataset statistics:
+- Minimum: 0.01 molecules/ns (very small pores or very low pressure)
+- Maximum: 2855.46 molecules/ns (large pores at high pressure)
+- Mean: 129.93 molecules/ns
+- Median: 48.50 molecules/ns
+- Standard deviation: 278.55 molecules/ns
+
+Note on units: The molecules/ns unit is specific to molecular dynamics simulations.
+In industrial practice, flux is expressed in L/m²/h (LMH) or m³/m²/day.
+For reference, commercial high-performance RO membranes achieve 15–40 L/m²/h at
+55–70 bar. The MD simulation values in molecules/ns correspond to extremely small
+membrane areas (few nm²), so conversion to industrial units requires knowing the
+membrane area and pore density.
+
+Why flux is predicted as log(flux+1):
+The raw water flux values span a very wide range (0.01 to 2855 molecules/ns), creating
+a highly right-skewed distribution that makes direct prediction very difficult for
+machine learning algorithms. The log(flux+1) transformation (base-10 logarithm of
+flux + 1) compresses this range to 0.004 – 3.456 and produces a near-normal distribution.
+
+The model internally predicts log(flux+1), and the application converts back to real
+flux automatically using: Flux = 10^(predicted value) - 1
+
+The transformed variable log(flux+1) statistics:
+- Minimum: 0.004
+- Maximum: 3.456
+- Mean: 1.651
+- Median: 1.695
+- Standard deviation: 0.686
+
+High water flux is desirable because it means more water produced per unit membrane
+area per unit time, which reduces the required membrane surface area and capital cost
+of the desalination plant.
+
+================================================================
+# RELATIONSHIPS BETWEEN VARIABLES
+================================================================
+
+PORE AREA AND SALT REJECTION:
+There is a strong inverse (negative) relationship between pore area and salt rejection.
+Small pores (< 24 Å²) generally achieve close to 100% salt rejection.
+As pore area increases beyond ~40 Å², salt rejection decreases sharply.
+The exact threshold depends on the pore chemistry (functionalization).
+OH and charged groups (FH, N, NO) can maintain higher rejection at larger pore sizes
+compared to H-terminated or pristine pores.
+
+PORE AREA AND WATER FLUX:
+There is a strong positive (direct) relationship between pore area and water flux.
+Flux increases approximately linearly with pore area for a given pressure and chemistry.
+This creates a fundamental trade-off: larger pores = more water flow but less salt rejection.
+This is the central challenge in desalination membrane design — balancing flux and selectivity.
+
+PRESSURE AND WATER FLUX:
+Higher applied pressure always increases water flux.
+The relationship is approximately linear for a given pore size and chemistry.
+Pressure does not significantly affect salt rejection in most cases (slight positive effect).
+This is why industrial RO systems operate at high pressures (55–70 bar for seawater).
+
+FUNCTIONALIZATION AND WATER FLUX:
+OH-terminated pores have higher water flux than H-terminated pores of the same size.
+This is because water molecules form hydrogen bonds with -OH groups at the pore edge,
+facilitating water entry and transport through the pore (hydrophilic effect).
+Conversely, hydrophobic functionalization (F-terminated) may initially resist wetting
+but creates a smooth transport pathway once established.
+
+FUNCTIONALIZATION AND SALT REJECTION:
+Charged functional groups (NO, FH, COO⁻, N) can significantly improve salt rejection
+beyond what size exclusion alone would predict.
+Negatively charged groups repel Cl⁻ (like charges repel).
+Positively charged groups repel Na⁺.
+This electrostatic exclusion mechanism is particularly important for borderline pore sizes
+where steric exclusion alone is insufficient for >99% rejection.
+
+POROSITY AND WATER FLUX:
+Water flux scales approximately proportionally with porosity.
+Double the porosity = approximately double the water flux per unit membrane area.
+This is because each pore contributes independently to total water transport.
+At very high porosities (>30%), this linearity breaks down due to pore-pore interactions.
+
+TEMPERATURE AND WATER FLUX:
+Higher temperature increases water flux due to reduced water viscosity.
+The relationship follows an Arrhenius-type behavior: flux ∝ exp(-Ea/RT).
+Temperature effects are secondary compared to pore area and pressure effects.
+A temperature increase from 27°C to 77°C typically increases flux by 30–60%.
+
+CONCENTRATION AND SALT REJECTION:
+Higher feed salt concentration slightly increases the percentage of salt rejection.
+This is because higher concentration creates a stronger osmotic back-pressure on ions,
+combined with increased electrostatic screening effects in concentrated solutions.
+However, higher concentration also reduces absolute water flux due to increased osmotic pressure.
+
+================================================================
+# THE MACHINE LEARNING MODEL
+================================================================
+
+--- MODEL OVERVIEW ---
+
+Two separate CatBoost models were trained:
+1. Salt Rejection Model: Predicts Salt Rejection (%) directly
+2. Water Flux Model: Predicts log(flux+1), converted back to molecules/ns for display
+
+Both models were trained on the same dataset of 465 rows extracted from 12 peer-reviewed
+MD simulation studies on SLNG membranes.
+
+--- ALGORITHM: CATBOOST (CATEGORICAL BOOSTING) ---
+
+CatBoost is a gradient boosting algorithm developed by Yandex (Russia) in 2017.
+It is specifically designed to handle categorical variables natively without requiring
+manual encoding, which is a key advantage for this project given the Geometry and
+Pore Chemistry inputs are categorical.
+
+How gradient boosting works:
+1. Start with a simple initial prediction (mean of target variable)
+2. Calculate the residuals (errors) of this prediction
+3. Train a decision tree to predict these residuals
+4. Add this tree to the model with a small weight (learning rate = 0.05)
+5. Recalculate residuals and repeat for 1000 iterations
+6. Final prediction = sum of all 1000 tree predictions
+
+CatBoost's key innovation (ordered boosting):
+CatBoost uses a technique called "ordered boosting" which processes training samples
+in a random order to prevent target leakage and overfitting, particularly important
+for small datasets like this one (465 samples).
+
+CatBoost handles categorical variables by:
+- Building statistics about the relationship between each categorical value and the target
+- Using a special "greedy target statistics" method that is resistant to overfitting
+- This avoids the dimensionality explosion of one-hot encoding
+
+--- CATBOOST HYPERPARAMETERS (EXACT CONFIGURATION) ---
+
+For ANYONE wanting to reproduce these models, use EXACTLY these parameters:
+
+SALT REJECTION MODEL (CatBoost):
+- iterations (n_estimators): 1000
+- learning_rate: 0.050
+- depth (max_depth): 6
+- l2_leaf_reg (lambda): 3
+- loss_function: RMSE
+- eval_metric: R2
+- random_seed: fixed (replicable training enabled)
+- cat_features: ['Geometry', 'Pore Chemistry (Functionalization)']
+- train/test split: 80% training, 20% testing (random state fixed)
+
+WATER FLUX MODEL (CatBoost):
+- iterations (n_estimators): 1000
+- learning_rate: 0.050
+- depth (max_depth): 6
+- l2_leaf_reg (lambda): 3
+- loss_function: RMSE
+- eval_metric: R2
+- random_seed: fixed (replicable training enabled)
+- cat_features: ['Geometry', 'Pore Chemistry (Functionalization)']
+- target variable: log(flux+1) — NOT raw flux
+- output conversion: flux = 10^(predicted_log_flux_plus_1) - 1
+- train/test split: 80% training, 20% testing (random state fixed)
+
+PREPROCESSING (same for both models — Orange Data Mining configuration):
+- Numerical features: Standardize (mean=0, variance=1) — StandardScaler
+- Categorical features: One feature per value (one-hot encoding in Orange)
+  Note: CatBoost in Python handles categoricals natively — specify cat_features parameter
+- Missing values: Average/Most frequent imputation (no missing values in final dataset)
+
+COMPARISON WITH OTHER ALGORITHMS — SALT REJECTION MODEL:
+
+Cross-Validation Results (10-fold CV):
+Algorithm               | RMSE  | MAE   | R²
+CatBoost (selected)     | 7.114 | 3.637 | 0.885
+XGBoost                 | 7.353 | 3.518 | 0.877
+Random Forest           | 7.916 | 4.329 | 0.858
+Decision Tree           |11.163 | 4.832 | 0.717
+Linear Regression       |13.268 | 9.600 | 0.600
+SVM                     |19.747 |16.137 | 0.114
+
+Train/Test Split Results (80/20):
+Algorithm               | RMSE  | MAE   | R²
+CatBoost (selected)     | 7.033 | 3.519 | 0.842
+XGBoost                 | 7.837 | 3.428 | 0.803
+Random Forest           | 8.225 | 4.365 | 0.783
+Decision Tree           | 9.278 | 4.227 | 0.724
+Linear Regression       |14.072 | 9.683 | 0.366
+SVM                     |17.355 |14.491 | 0.036
+
+CatBoost was selected over XGBoost because:
+1. Better cross-validation R² (0.885 vs 0.877)
+2. Native handling of categorical variables (Geometry, Pore Chemistry)
+3. More robust to overfitting with small datasets (465 rows)
+4. Consistent results confirmed in both Orange Data Mining AND Jupyter Notebook (Anaconda)
+5. Lower RMSE on both evaluation protocols
+
+--- FEATURE IMPORTANCE ---
+
+Based on the CatBoost model analysis, the approximate feature importance ranking is:
+1. Pore Area (Å²) — highest importance, dominates both flux and rejection predictions
+2. Pore Chemistry (Functionalization) — second most important, especially for rejection
+3. Applied Pressure (MPa) — most important for flux prediction
+4. Porosity (%) — important scaling factor for flux
+5. Feed Concentration (ppm) — moderate importance, mainly affects rejection
+6. Temperature (°C) — lower importance, secondary effect on flux
+7. Geometry — lowest importance as a single factor, but interacts with area and chemistry
+
+================================================================
+# DATA SOURCES AND SCIENTIFIC REFERENCES
+================================================================
+
+The dataset was built from 12 peer-reviewed publications:
+
+1. DOI: 10.1021/nl3012853 — Nano Letters (ACS), 2012
+   Cohen-Tanugi & Grossman — Pioneering MD study, H and OH functionalization
+   71 data rows extracted — FOUNDATIONAL REFERENCE for the entire field
+
+2. DOI: 10.1021/acsnano.1c05345 — ACS Nano, 2021
+   119 data rows — Most comprehensive chemistry study (N, NH, NO, FH, B)
+
+3. DOI: 10.1021/acs.jctc.8b00226 — J. Chemical Theory and Computation (ACS), 2018
+   42 data rows — SiH2 and Si(OH)2 functionalization study
+
+4. DOI: 10.1021/acs.jpcb.1c06327 — J. Physical Chemistry B (ACS), 2021
+   26 data rows — Comparative geometry study (Ozark, Circular, Triangular, Rhombic)
+
+5. DOI: 10.1038/s41699-021-00246-9 — npj 2D Materials and Applications (Nature), 2021
+   82 data rows — Wide range of pressures and concentrations
+
+6. DOI: 10.1039/C7NR07963J1 — Nanoscale (RSC), 2017
+   48 data rows — Variable porosity and temperature effects
+
+7. DOI: 10.1016/j.molliq.2020.112478 — Journal of Molecular Liquids, 2020
+   15 data rows — Organic functionalizations (methyl, ethyl, fluorinated)
+
+8. DOI: 10.1016/j.carbon.2017.01.099 — Carbon (Elsevier), 2017
+   24 data rows — Si termination, high pressure effects
+
+9. DOI: 10.1016/j.commatsci.2016.07.036 — Computational Materials Science, 2016
+   6 data rows — Hexagonal Si pores, high concentrations
+
+10. DOI: 10.1007/s11242-022-01870-9 — Transport in Porous Media (Springer), 2022
+    14 data rows — Transport modeling, low concentrations
+
+11. DOI: 10.1063/1.5143069 — Journal of Applied Physics (AIP), 2020
+    12 data rows — Temperature effects from 2°C to 77°C on flux
+
+12. DOI: 10.2166/wst.2024.334 — Water Science and Technology (IWA), 2024
+    6 data rows — Low pressures (1–5 MPa), low salinity conditions
+
+Total dataset: 465 clean rows, 9 columns (7 inputs + 2 outputs) + log(flux+1) column
+Data was NOT augmented — only real data from published MD simulations was used.
+Data extraction from figures used PlotDigitizer software.
+Preliminary model evaluation used Orange Data Mining software.
+Final model validation and serialization used Jupyter Notebook (Anaconda, Python).
+
+================================================================
+# FREQUENTLY ASKED QUESTIONS (FAQ)
+================================================================
+
+Q: What is salt rejection?
+A: Salt rejection is the percentage of salt ions that the graphene membrane blocks from
+   passing through. A salt rejection of 99% means that if you put 10,000 ppm salt water
+   in, you get approximately 100 ppm salt water out. Higher is always better for
+   desalination. Commercial RO membranes achieve 99.5–99.8%.
+
+Q: What is water flux?
+A: Water flux measures how much water passes through the membrane per unit time.
+   In this model it is expressed in molecules per nanosecond (MD simulation units).
+   Higher flux means more water produced per unit membrane area, which is economically
+   desirable. However, flux and salt rejection are in trade-off: optimizing both
+   simultaneously is the central challenge of membrane design.
+
+Q: Why does the model use log(flux+1) instead of direct flux?
+A: Because raw flux values in the dataset range from 0.01 to 2855 molecules/ns —
+   a range of over 5 orders of magnitude. This extreme range makes direct machine
+   learning prediction very inaccurate. The logarithmic transformation compresses
+   this range to 0–3.5, making the distribution approximately normal and allowing
+   CatBoost to learn accurate relationships. The app converts back to real flux
+   automatically.
+
+Q: What is the role of pressure?
+A: Pressure is the driving force that pushes water through the nanopores against osmotic
+   resistance. Higher pressure always increases water flux approximately linearly.
+   In industrial RO, seawater desalination operates at 55–70 bar (5.5–7 MPa).
+   In MD simulations, 100–500 MPa is commonly used to observe transport in tiny simulation
+   boxes. The model has learned the pressure-flux relationship across the full training range.
+
+Q: What is functionalization (pore chemistry)?
+A: Functionalization refers to the chemical groups attached to the carbon atoms at the
+   edges of the nanopores in the graphene sheet. When you punch a hole in graphene, the
+   edge atoms become chemically reactive and bond with surrounding atoms or groups
+   (H, OH, F, N, etc.). These groups dramatically change how water and salt ions
+   interact with the pore, affecting both flux and selectivity.
+
+Q: Which functionalization is best for desalination?
+A: It depends on the objective:
+   - For maximum water flux: OH (hydroxyl) functionalization is best — hydrophilic
+     groups attract water molecules and accelerate transport.
+   - For maximum salt rejection: Charged groups (N, NO, FH, COO⁻) are best — they
+     add electrostatic ion exclusion on top of size exclusion.
+   - For balanced performance: H (hydrogen) termination is the most studied and offers
+     a reliable flux-rejection balance.
+
+Q: What is porosity and why does it matter?
+A: Porosity is the percentage of the graphene membrane area that consists of pores.
+   A 5% porosity means 5% of the membrane is open space (nanopores).
+   Higher porosity directly increases water flux (more pores = more water passages).
+   Real membranes currently achieve 0.1–5% porosity with ion bombardment methods.
+   Very high porosity (>30%) weakens the graphene sheet structurally.
+
+Q: Why use graphene instead of conventional polymer membranes?
+A: Three key advantages:
+   1. Atomic thickness (~0.335 nm vs ~100 nm for polyamide) means near-zero hydraulic
+      resistance, enabling theoretically 2–3 orders of magnitude higher water flux.
+   2. Perfect crystalline structure eliminates the defects and variability of polymer
+      membrane synthesis.
+   3. Chemical stability — graphene does not degrade with chlorine (unlike polyamide
+      RO membranes which are chlorine-sensitive and require careful pretreatment).
+
+Q: Why is SLNG not yet used commercially?
+A: Two main barriers remain:
+   1. Manufacturing: Perforating a large graphene sheet (think football field scale)
+      with billions of uniform nanopores of precise size and chemistry is extremely
+      challenging. Current techniques (ion bombardment, plasma etching) are promising
+      but not yet economically scalable.
+   2. Computational: Understanding and optimizing SLNG performance requires expensive
+      MD simulations on supercomputers. This prediction tool helps solve this barrier.
+
+Q: How accurate is the model?
+A: For the Salt Rejection model:
+   - R² = 0.885 on 10-fold cross-validation (explains 88.5% of variance)
+   - R² = 0.842 on held-out 20% test set (93 unseen samples)
+   - RMSE = 7.0% salt rejection on test set
+   - This means predictions are typically within ±7% of the actual MD simulation value
+   The accuracy is sufficient for rapid screening of pore designs before running expensive
+   full MD simulations.
+
+Q: Can I use this tool to replace molecular dynamics simulations?
+A: This tool is designed for rapid screening and exploration of parameter space,
+   NOT as a complete replacement for MD simulations. Use it to:
+   - Quickly identify promising pore geometries and chemistries
+   - Understand trends and relationships between parameters
+   - Reduce the number of expensive MD simulations needed
+   - Make the research accessible to groups without HPC access
+   For final validation of a specific design, full MD simulation remains the gold standard.
+
+Q: What are the input units?
+A: Pore Area: Angstroms squared (Å²) — 1 Å = 0.1 nm = 10⁻¹⁰ m
+   Pressure: Megapascals (MPa) — 1 MPa = 10 bar = 145 psi
+   Feed Concentration: Parts per million (ppm) — equivalent to mg/L for dilute solutions
+   Temperature: Degrees Celsius (°C)
+   Porosity: Percentage (%) of membrane area that is pores
+   Geometry: Choose from Hexagonal, Circular, Ozark, Triangular, Rhombic
+   Chemistry: Choose from 18 available functionalizations
+
+Q: What does it mean when salt rejection is 100%?
+A: 100% salt rejection means that in the MD simulation, no salt ions passed through the
+   membrane during the entire simulation time. This is the ideal case and occurs when:
+   - The pore is smaller than the hydrated ion diameter
+   - AND/OR the pore chemistry provides strong electrostatic repulsion of ions
+   In practice (industrial scale), achieving and maintaining 100% rejection continuously
+   is not realistic, but values >99.5% are achievable with well-designed SLNG membranes.
+
+Q: What is the difference between water flux in molecules/ns and L/m²/h?
+A: The molecules/ns unit is used in MD simulations because simulation boxes are
+   nanometer-sized. To convert to industrial units (L/m²/h), you would need:
+   - The actual number of pores per unit membrane area (determined by porosity and pore area)
+   - The simulation box dimensions
+   The model provides MD-scale flux for direct comparison with published MD studies.
+   For industrial design, multiply by the pore density to get membrane-scale flux.
+
+Q: How was the data collected?
+A: Through systematic review of 50 scientific articles, from which 12 were selected
+   as compatible with the project's data schema. Numerical data was extracted from
+   published figures using PlotDigitizer software and from tables directly.
+   The final dataset contains 465 rows with zero missing values and no artificial
+   data augmentation — all data comes from real MD simulation results.
+
+Q: Which molecular dynamics software generates this type of data?
+A: The published data was generated using:
+   - LAMMPS (Large-scale Atomic/Massively Parallel Simulator, Sandia National Labs, USA)
+   - NAMD (Nanoscale Molecular Dynamics, UIUC, USA)
+   - GROMACS (University of Uppsala, Sweden)
+   All three require HPC clusters or supercomputers. A typical simulation uses
+   100–10,000 CPU cores and takes 1–14 days of computation.
+
+================================================================
+# GLOSSARY OF TECHNICAL TERMS
+================================================================
+
+Angstrom (Å): Unit of length equal to 0.1 nanometer (10⁻¹⁰ m). Used to measure
+atomic distances. The graphene C-C bond is 1.42 Å.
+
+CatBoost: Gradient boosting machine learning algorithm by Yandex. Handles categorical
+variables natively. Selected as the prediction model for this project.
+
+Cross-validation (CV): Model evaluation technique that splits data into K folds,
+trains on K-1 folds and tests on 1 fold, rotating K times. 10-fold CV used here.
+
+Desalination: Process of removing salt and dissolved minerals from seawater or
+brackish water to produce fresh water suitable for human consumption.
+
+Functionalization: Chemical modification of graphene pore edges with specific
+chemical groups (H, OH, F, N, etc.) that alter transport properties.
+
+Gradient Boosting: Machine learning ensemble technique that builds models sequentially,
+each new model correcting the errors of the previous one.
+
+Graphene: Two-dimensional material of single-layer carbon atoms in hexagonal lattice.
+Discovered 2004. Nobel Prize Physics 2010.
+
+log(flux+1): Base-10 logarithm of (water flux + 1). Applied to handle the extreme
+range of flux values in the dataset. Model predicts this, then converts back.
+
+Molecular Dynamics (MD): Computational simulation method that calculates atomic
+trajectories by solving Newton's equations of motion. Used to simulate water and
+ion transport through graphene nanopores.
+
+Nanopore: A nanometer-scale hole in the graphene membrane. In this study, pores
+range from 0.58 Å² to 205.3 Å² in area.
+
+Osmotic pressure: Natural pressure difference across a semipermeable membrane due
+to salt concentration difference. Seawater osmotic pressure ≈ 27 bar (2.7 MPa).
+
+Porosity: Fraction of total membrane area consisting of nanopores, expressed as %.
+
+R² (R-squared): Statistical measure of model accuracy. R²=1 means perfect prediction,
+R²=0 means the model is no better than predicting the mean. Model achieves R²=0.885.
+
+RAG (Retrieval-Augmented Generation): AI technique where a language model retrieves
+relevant information from a knowledge base before generating responses. Used by the
+chatbot in this application.
+
+RMSE (Root Mean Square Error): Square root of the average squared prediction error.
+For salt rejection model: RMSE = 7.03% on test set.
+
+Salt Rejection (%): Percentage of salt ions blocked by the membrane. Key performance
+indicator. Formula: SR = (1 - C_permeate/C_feed) × 100%.
+
+SLNG (Single-Layer Nanoporous Graphene): The specific type of graphene membrane
+studied in this project — a single atomic layer with precisely sized nanopores.
+
+TDS (Total Dissolved Solids): Total concentration of dissolved substances in water,
+measured in ppm or mg/L. WHO drinking water standard: < 500 ppm.
+
+Water Flux (molecules/ns): Rate of water molecule transport through the membrane
+in molecular dynamics simulation units. Higher = more water production.
+
+XGBoost: Extreme Gradient Boosting, another gradient boosting algorithm. Ranked
+second (after CatBoost) in performance for this project.
+
+================================================================
+# SCIENTIFIC CONTEXT — WHY THIS PROJECT MATTERS
+================================================================
+
+Access to clean water is recognized as a fundamental human right by the United Nations
+(Resolution A/RES/64/292, 2010). Yet billions of people lack this basic necessity.
+
+Traditional desalination (thermal processes) is too energy-intensive (10–16 kWh/m³)
+for wide deployment in developing countries. Current RO membranes (3–5 kWh/m³) are better
+but still require significant infrastructure investment.
+
+SLNG membranes theoretically offer:
+- 2–3 orders of magnitude higher water flux than polymer RO (less membrane area needed)
+- Energy consumption potentially approaching the thermodynamic minimum (~1 kWh/m³)
+- No chemical degradation (unlike chlorine-sensitive polyamide)
+- Potentially lower capital and operating costs at industrial scale
+
+The barrier to progress is computational: every new pore design must be tested by
+expensive MD simulations on supercomputers that are only available to well-funded
+research groups in developed countries.
+
+This project democratizes SLNG membrane research by providing:
+1. A freely accessible web tool (no registration, no cost, no download required)
+2. Instant predictions (milliseconds vs days of HPC computation)
+3. Universal access (works on any device, any country, any internet connection)
+4. Scientific rigor (trained on real published MD data, not synthetic data)
+
+The tool is designed for:
+- University researchers in developing countries without HPC access
+- Industrial engineers evaluating SLNG membrane potential
+- Students learning about membrane science and machine learning
+- Anyone curious about the physics of nanoscale water transport
+
+================================================================
+END OF KNOWLEDGE BASE
+Project: PFE — Graphene Membrane ML Predictor
+FSR 2026 — Version 1.0
+App URL: https://pfe-fsr-graphene-laaraj-lahcen-2026.streamlit.app/
+================================================================
