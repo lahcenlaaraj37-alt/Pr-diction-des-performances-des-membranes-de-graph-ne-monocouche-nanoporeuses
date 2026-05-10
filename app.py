@@ -173,8 +173,10 @@ window.addEventListener('load', function() {
 #    s'affiche au-dessus de l'en-tête personnalisé.
 # 3. L'en-tête personnalisé est positionné à "top: 3.5rem" (collé sous
 #    la barre Streamlit) grâce à son id "custom-header".
-# 4. Des Media Queries sont ajoutées pour l'affichage sur téléphone.
-# 5. Le margin-top du contenu principal est ajusté pour ne pas être
+# 4. La barre latérale commence également à "top: 3.5rem" (collée sous
+#    la barre Streamlit) grâce à la règle CSS sur [data-testid="stSidebar"].
+# 5. Des Media Queries sont ajoutées pour l'affichage sur téléphone.
+# 6. Le margin-top du contenu principal est ajusté pour ne pas être
 #    caché derrière l'en-tête fixe.
 _APP_CSS = """
 <style>
@@ -453,9 +455,13 @@ _APP_CSS = """
      ======================================================== */
 
   /* NOUVEAU : La barre latérale s'affiche au-dessus de l'en-tête
-     personnalisé (z-index élevé) pour ne pas être masquée. */
+     personnalisé (z-index élevé) pour ne pas être masquée.
+     De plus, elle commence juste en dessous de la barre Streamlit
+     originale (top: 3.5rem) et prend toute la hauteur restante. */
   section[data-testid="stSidebar"] {
     z-index: 10000 !important;
+    top: 3.5rem !important;
+    height: calc(100vh - 3.5rem) !important;
   }
 
   /* NOUVEAU : L'en-tête personnalisé est collé juste sous la
@@ -472,6 +478,13 @@ _APP_CSS = """
        sur mobile (passage en colonne). */
     .main .block-container {
       margin-top: 7rem !important;
+    }
+
+    /* La barre latérale occupe toute la largeur sur mobile et
+       commence également sous la barre Streamlit. */
+    section[data-testid="stSidebar"] {
+      top: 3.5rem !important;
+      height: calc(100vh - 3.5rem) !important;
     }
 
     /* L'en-tête passe en disposition verticale et ses espacements
