@@ -164,11 +164,12 @@ window.addEventListener('load', function() {
 # ============================================================
 # MODIFICATIONS APPORTÉES :
 # [MODIF 1] section[data-testid="stSidebar"] desktop :
-#   - top réglé de "9.5rem" à "0" pour que la barre latérale commence
-#     tout en haut de la fenêtre et s'aligne parfaitement avec l'en-tête.
-#   - hauteur ajustée à 100vh pour couvrir toute la hauteur de l'écran.
-# [MODIF 2] Suppression de la règle ::before sur la barre latérale,
-#   car elle n'est plus nécessaire pour masquer l'espace indésirable.
+#   - top réglé à "3.5rem" pour que la barre latérale démarre
+#     juste en dessous de la barre Streamlit native.
+#   - hauteur ajustée à calc(100vh - 3.5rem).
+#   - Ajout de padding-top: 0 !important pour supprimer tout
+#     espace interne qui pourrait créer une zone colorée.
+# [MODIF 2] Le pseudo-élément ::before a été supprimé car inutile.
 # Les Media Queries mobiles sont INCHANGÉES.
 _APP_CSS = """
 <style>
@@ -250,7 +251,7 @@ _APP_CSS = """
 
   [data-testid="stSidebar"] {
     background-color: #1e3a8a !important;
-    padding-top: 20px !important;
+    padding-top: 0 !important;
   }
 
   [data-testid="stSidebar"] .st-emotion-cache-16txtl3 {
@@ -423,13 +424,15 @@ _APP_CSS = """
   }
 
   /* ========================================================
-     DESKTOP : Sidebar alignée parfaitement avec le haut de la page
-     [MODIF 1] top: 0 pour que la barre latérale démarre tout en haut.
+     DESKTOP : Sidebar positionnée juste sous la barre Streamlit
+     top: 3.5rem correspond à la hauteur de la barre Streamlit native.
+     La sidebar commence exactement là où la barre Streamlit se termine.
      ======================================================== */
   section[data-testid="stSidebar"] {
     z-index: 10000 !important;
-    top: 0 !important;
-    height: 100vh !important;
+    top: 3.5rem !important;
+    height: calc(100vh - 3.5rem) !important;
+    padding-top: 0 !important;
   }
 
   /* L'en-tête personnalisé reste collé sous la barre Streamlit */
