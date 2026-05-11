@@ -43,9 +43,6 @@ st.set_page_config(
 # ============================================================
 # STYLES CSS PERSONNALISÉS
 # ============================================================
-# NOTE : Le bloc qui masquait la barre Streamlit originale a été
-#        commenté pour que la barre reste visible et fonctionnelle.
-#        Tous les autres styles sont inchangés.
 st.markdown("""
 <style>
 .stApp {
@@ -106,7 +103,6 @@ div[role="option"]:hover {
     background-color: #dbeafe !important;
 }
 
-/* JavaScript: Surveillance du bouton Streamlit original maintenant en bas */
 button[data-testid="collapsedControl"] {
     position: fixed !important;
     bottom: 20px !important;
@@ -166,18 +162,16 @@ window.addEventListener('load', function() {
 # ============================================================
 # CSS PRINCIPAL DE L'APPLICATION (_APP_CSS)
 # ============================================================
-# Modifications apportées par rapport au code original :
-# 1. La barre Streamlit originale est maintenant visible (le bloc qui
-#    la masquait a été commenté dans le style ci-dessus).
-# 2. Le z-index de la barre latérale est passé à 10000 pour qu'elle
-#    s'affiche au-dessus de l'en-tête personnalisé.
-# 3. L'en-tête personnalisé est positionné à "top: 3.5rem" (collé sous
-#    la barre Streamlit) grâce à son id "custom-header".
-# 4. La barre latérale commence également à "top: 3.5rem" (collée sous
-#    la barre Streamlit) grâce à la règle CSS sur [data-testid="stSidebar"].
-# 5. Des Media Queries sont ajoutées pour l'affichage sur téléphone.
-# 6. Le margin-top du contenu principal est ajusté pour ne pas être
-#    caché derrière l'en-tête fixe.
+# MODIFICATIONS PAR RAPPORT AU CODE ORIGINAL :
+# [MODIF 1] section[data-testid="stSidebar"] desktop :
+#   - top passe de "3.5rem" à "9.5rem" pour que la sidebar démarre
+#     au même niveau que le bas du custom-header (et non au-dessus).
+#   - height ajusté en conséquence : calc(100vh - 9.5rem).
+# [MODIF 2] Ajout d'un override ::before sur la sidebar pour éliminer
+#   la zone bleue/colorée visible au-dessus de la sidebar entre
+#   la barre Streamlit et le début du contenu sidebar.
+#   On force background transparent sur la zone [0 → 9.5rem].
+# Les Media Queries mobile sont INCHANGÉES (top: 3.5rem sur mobile).
 _APP_CSS = """
 <style>
   body {
@@ -194,8 +188,6 @@ _APP_CSS = """
     padding-top: 0 !important;
     padding-bottom: 1rem;
     max-width: 1200px;
-    /* Marge augmentée pour compenser la hauteur de l'en-tête fixe
-       (barre Streamlit ~3.5rem + en-tête ~6rem + espace) */
     margin-top: 13rem !important;
     padding-top: 1rem !important;
   }
@@ -204,24 +196,6 @@ _APP_CSS = """
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
-
-  /* Bloc original qui masquait la barre Streamlit – conservé ici
-     en commentaire pour référence, mais il NE DOIT PAS être actif
-     pour que la barre Streamlit reste visible et fonctionnelle. */
-  /*
-  .stApp > div > div > div > div > div,
-  .stApp header,
-  .stApp .stToolbar,
-  .stApp .stHeader,
-  .stApp [data-testid="stHeader"],
-  .stApp [data-testid="stToolbar"] {
-    display: none !important;
-    visibility: hidden !important;
-    height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  */
 
   .gp-card {
     border-radius: 8px;
@@ -451,44 +425,60 @@ _APP_CSS = """
   }
 
   /* ========================================================
-     AJOUTS POUR LES MODIFICATIONS DEMANDÉES
+     DESKTOP : Sidebar alignée avec le bas du custom-header
+     [MODIF 1] top passe de 3.5rem à 9.5rem (3.5rem barre
+     Streamlit + ~6rem hauteur custom-header).
+     height ajusté en conséquence.
      ======================================================== */
-
-  /* NOUVEAU : La barre latérale s'affiche au-dessus de l'en-tête
-     personnalisé (z-index élevé) pour ne pas être masquée.
-     De plus, elle commence juste en dessous de la barre Streamlit
-     originale (top: 3.5rem) et prend toute la hauteur restante. */
   section[data-testid="stSidebar"] {
     z-index: 10000 !important;
-    top: 3.5rem !important;
-    height: calc(100vh - 3.5rem) !important;
+    top: 9.5rem !important;
+    height: calc(100vh - 9.5rem) !important;
   }
 
-  /* NOUVEAU : L'en-tête personnalisé est collé juste sous la
-     barre Streamlit originale (hauteur d'environ 3.5rem). */
+  /* [MODIF 2] Masquer la zone colorée visible entre la barre
+     Streamlit et le début de la sidebar.
+     On force background transparent + no border sur la portion
+     de la sidebar qui chevauche la zone de la barre Streamlit,
+     en ajoutant un pseudo-élément blanc devant la zone [3.5rem → 9.5rem]
+     côté sidebar pour la rendre invisible (fond blanc = fond page). */
+  section[data-testid="stSidebar"]::before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 3.5rem;
+    left: 0;
+    width: 22rem;
+    height: 6rem;
+    background: transparent !important;
+    pointer-events: none;
+    z-index: 10001;
+  }
+
+  /* L'en-tête personnalisé reste collé sous la barre Streamlit */
   #custom-header {
     top: 3.5rem !important;
   }
 
-  /* NOUVEAU : Media Queries pour l'affichage sur téléphone mobile.
-     Ajuste les marges et la disposition pour que le contenu reste
-     lisible et bien organisé. */
+  /* ========================================================
+     MOBILE : inchangé — top: 3.5rem comme avant
+     ======================================================== */
   @media screen and (max-width: 768px) {
-    /* Réduction de la marge supérieure car l'en-tête est moins haut
-       sur mobile (passage en colonne). */
     .main .block-container {
       margin-top: 7rem !important;
     }
 
-    /* La barre latérale occupe toute la largeur sur mobile et
-       commence également sous la barre Streamlit. */
+    /* MOBILE INCHANGÉ : sidebar reste à top: 3.5rem */
     section[data-testid="stSidebar"] {
       top: 3.5rem !important;
       height: calc(100vh - 3.5rem) !important;
     }
 
-    /* L'en-tête passe en disposition verticale et ses espacements
-       sont réduits pour s'adapter aux petits écrans. */
+    /* Annuler le pseudo-element desktop sur mobile */
+    section[data-testid="stSidebar"]::before {
+      display: none !important;
+    }
+
     #custom-header {
       padding-left: 1rem !important;
       padding-right: 1rem !important;
@@ -497,18 +487,14 @@ _APP_CSS = """
       height: auto !important;
     }
 
-    /* Réduction de la taille du titre principal pour éviter
-       les débordements. */
     #custom-header > div:first-child {
       font-size: 1.4rem !important;
     }
 
-    /* Réduction de la taille des sous-titres. */
     #custom-header > div:first-child div {
       font-size: 0.75rem !important;
     }
 
-    /* Le nom du développeur est affiché plus petit. */
     #custom-header > div:last-child {
       font-size: 0.7rem !important;
       margin-top: 0.3rem !important;
@@ -544,7 +530,6 @@ def _predict_single(row: dict) -> PredictionResult:
     lf = float(flux_model.pipeline.predict(X)[0])
     flux = float(inverse_log_flux_plus1_to_flux(lf, log_base=LOG_BASE))
 
-    # Cas particulier : concentration d'alimentation nulle ou quasi-nulle
     feed_conc = float(row.get("Feed Concentration  (ppm)", 0))
     if 0 <= feed_conc <= 1:
         sr = 100.0
@@ -594,23 +579,15 @@ def _chemistry_picker(chemistry_display: list[str]) -> str:
 # BOUTON D'AFFICHAGE/MASQUAGE DE LA BARRE LATÉRALE
 # ============================================================
 def sidebar_toggle():
-    """
-    Gère l'affichage du bouton ☰ Menu et la synchronisation avec
-    le bouton de barre latérale de Streamlit.
-    """
     if 'sidebar_open' not in st.session_state:
         st.session_state.sidebar_open = True
 
-    # Masquer la barre latérale avec CSS lorsqu'elle est fermée
     if not st.session_state.sidebar_open:
         st.markdown(
             """<style>section[data-testid="stSidebar"] {display: none !important;}</style>""",
             unsafe_allow_html=True,
         )
 
-    # JavaScript: Surveillance du bouton Streamlit original maintenant en bas
-    # Lorsque l'utilisateur clique dessus pour masquer la barre latérale,
-    # nous programmons un clic sur le bouton ☰ Menu pour synchroniser session_state
     st.markdown(
         """
         <script>
@@ -642,13 +619,11 @@ def sidebar_toggle():
         unsafe_allow_html=True,
     )
 
-    # Bouton flottant ☰ Menu (blanc sur fond bleu)
     st.markdown('<div id="floating-menu-btn">', unsafe_allow_html=True)
     if st.button("☰ Menu", key="toggle_sb_unique"):
         st.session_state.sidebar_open = not st.session_state.sidebar_open
         st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
-# ============================================================
 
 
 def main():
@@ -662,14 +637,12 @@ def main():
     geometry_choices = categories.get("Geometry", [])
     chemistry_choices = categories.get("Pore Chemistry (Functionalization)", [])
 
-    # Application du CSS principal
     st.markdown(_APP_CSS, unsafe_allow_html=True)
 
     # ============================================================
     # BARRE LATÉRALE (SIDEBAR)
     # ============================================================
     with st.sidebar:
-        # En-tête de la barre latérale avec logo et informations
         st.sidebar.markdown("""
 <div style='text-align: center; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); margin-bottom: 20px;'>
     <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 12px;">
@@ -720,9 +693,6 @@ def main():
     # ============================================================
     # EN-TÊTE PERSONNALISÉ FIXE
     # ============================================================
-    # MODIFICATION : L'en-tête est maintenant positionné à "top: 3.5rem"
-    # (juste sous la barre Streamlit originale) au lieu de "top: 0".
-    # Un attribut id="custom-header" a été ajouté pour le style CSS.
     st.markdown(
         """
 <div id="custom-header" style="position: fixed; top: 3.5rem; left: 0; right: 0; width: 100%; background: linear-gradient(135deg, #1e3a8a 0%, #2c5282 100%); padding: 1.5rem 2rem; padding-left: 350px; z-index: 9999; box-shadow: 0 4px 20px rgba(30, 58, 138, 0.3); display: flex; justify-content: space-between; align-items: center;">
@@ -747,7 +717,6 @@ def main():
 
     st.write("")
 
-    # Listes des choix disponibles pour les menus déroulants
     geometry_display = sorted({g.strip(): None for g in geometry_choices}.keys()) if geometry_choices else []
     chemistry_display = sorted({c.strip(): None for c in chemistry_choices}.keys()) if chemistry_choices else []
 
@@ -755,6 +724,35 @@ def main():
     # PAGE : SIMULATION UNIQUE
     # ============================================================
     def render_single_simulation():
+
+        # --------------------------------------------------------
+        # [MODIF 3] BANNIÈRE DE PRÉSENTATION — ajoutée ici,
+        # après l'en-tête fixe et avant les colonnes Inputs/Membrane.
+        # Positionnée dans le flux normal (non fixe) du contenu,
+        # donc elle ne chevauche pas la sidebar ni l'en-tête.
+        # --------------------------------------------------------
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #e8f4fd 0%, #dbeafe 100%);
+            border: 1px solid #93c5fd;
+            border-left: 5px solid #1e3a8a;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.2rem;
+        ">
+            <div style="font-size: 1.05rem; font-weight: 700; color: #1e3a8a; margin-bottom: 0.35rem;">
+                🌊 Welcome to Aqua.LA.Graph-Lite v1.0
+            </div>
+            <div style="font-size: 0.92rem; color: #1e40af; line-height: 1.6;">
+                Predict the performance of single-layer nanoporous graphene membranes for seawater desalination
+                in seconds — no code, no supercomputer required. Simply set your 7 membrane parameters below
+                and let the AI model instantly estimate <strong>Salt Rejection (%)</strong>
+                and <strong>Water Flux (molecule/ns)</strong>.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        # --------------------------------------------------------
+
         col_inputs, col_viz_results = st.columns([0.3, 0.7], gap="medium")
 
         with col_inputs:
@@ -764,7 +762,6 @@ def main():
             chemistry = _chemistry_picker(chemistry_display)
 
             def _num_input(label: str, col: str, default: float | None = None):
-                """Affiche un champ numérique avec validation de plage."""
                 r = numeric_ranges.get(col, None)
                 if r:
                     min_v = float(r["min"])
@@ -855,7 +852,6 @@ def main():
         with col_viz_results:
             st.subheader(t("membrane", st.session_state.lang))
 
-            # Note d'information sur les données
             st.markdown("""
             <div style="background-color: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 0.8rem; margin-bottom: 1rem;">
                 <p style="color: #1e3a8a; font-size: 0.9rem; margin: 0; line-height: 1.4;">
@@ -1472,7 +1468,6 @@ def main():
 
             prompt = st.chat_input("Ask about desalination, graphene membranes, or water treatment…")
 
-            # AI Assistant Disclaimer
             st.markdown("""
             <div style="background-color: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
                 <p style="color: #1e3a8a; font-size: 0.9rem; margin: 0; line-height: 1.4;">
@@ -1515,7 +1510,6 @@ def main():
             base64.b64encode(open("assets/Image2.jpg", "rb").read()).decode()
         ), unsafe_allow_html=True)
 
-        # Main title
         st.markdown("""
         <h1 style="color: #1e3a8a; font-size: 2.5rem; font-weight: 700; text-align: center; margin-bottom: 1rem;">
             About Aqua.LA.Graph-Lite v1.0
@@ -1528,7 +1522,6 @@ def main():
         </h2>
         """, unsafe_allow_html=True)
 
-        # Academic info
         st.markdown("""
         <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border-left: 4px solid #1e3a8a;">
             <h3 style="color: #1e3a8a; font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem;">
@@ -1543,7 +1536,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
 
-        # Project Overview
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Project Overview
@@ -1558,7 +1550,6 @@ However, designing and optimizing these membranes today relies almost entirely o
 </div>
         """, unsafe_allow_html=True)
 
-        # Our Mission
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Our Mission
@@ -1572,7 +1563,6 @@ The goal is not to replace molecular dynamics simulations, but to dramatically r
 </div>
         """, unsafe_allow_html=True)
 
-        # How It Works
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             How It Works & Model Performance
@@ -1585,7 +1575,6 @@ The goal is not to replace molecular dynamics simulations, but to dramatically r
         </div>
         """, unsafe_allow_html=True)
 
-        # Input/Output sections
         col1, col2 = st.columns([1, 1])
 
         with col1:
@@ -1626,7 +1615,6 @@ The model demonstrated strong predictive performance on both training and held-o
 </div>
         """, unsafe_allow_html=True)
 
-        # Important Disclaimer
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Important Disclaimer
@@ -1644,7 +1632,6 @@ The model demonstrated strong predictive performance on both training and held-o
         </div>
         """, unsafe_allow_html=True)
 
-        # Supervisors & Student
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Supervisors & Student
@@ -1669,7 +1656,6 @@ Faculty of Sciences, Mohammed V University, Rabat
 </div>
 """, unsafe_allow_html=True)
 
-        # Open Science & Reproducibility
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Open Science & Reproducibility
@@ -1700,7 +1686,6 @@ Faculty of Sciences, Mohammed V University, Rabat
         </div>
         """, unsafe_allow_html=True)
 
-        # AI & Future of Research
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             A Note on AI & the Future of Research
@@ -1713,7 +1698,6 @@ Faculty of Sciences, Mohammed V University, Rabat
         </div>
         """, unsafe_allow_html=True)
 
-        # Acknowledgments
         st.markdown("""
         <h2 style="color: #1e3a8a; font-size: 1.6rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem;">
             Acknowledgments
@@ -1726,7 +1710,6 @@ Faculty of Sciences, Mohammed V University, Rabat
         </div>
         """, unsafe_allow_html=True)
 
-        # Student Developer Profile
         st.markdown("""
         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 15px; padding: 2rem; margin-top: 3rem; margin-bottom: 2rem;">
             <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
