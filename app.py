@@ -162,16 +162,14 @@ window.addEventListener('load', function() {
 # ============================================================
 # CSS PRINCIPAL DE L'APPLICATION (_APP_CSS)
 # ============================================================
-# MODIFICATIONS PAR RAPPORT AU CODE ORIGINAL :
+# MODIFICATIONS APPORTÉES :
 # [MODIF 1] section[data-testid="stSidebar"] desktop :
-#   - top passe de "3.5rem" à "9.5rem" pour que la sidebar démarre
-#     au même niveau que le bas du custom-header (et non au-dessus).
-#   - height ajusté en conséquence : calc(100vh - 9.5rem).
-# [MODIF 2] Ajout d'un override ::before sur la sidebar pour éliminer
-#   la zone bleue/colorée visible au-dessus de la sidebar entre
-#   la barre Streamlit et le début du contenu sidebar.
-#   On force background transparent sur la zone [0 → 9.5rem].
-# Les Media Queries mobile sont INCHANGÉES (top: 3.5rem sur mobile).
+#   - top réglé de "9.5rem" à "0" pour que la barre latérale commence
+#     tout en haut de la fenêtre et s'aligne parfaitement avec l'en-tête.
+#   - hauteur ajustée à 100vh pour couvrir toute la hauteur de l'écran.
+# [MODIF 2] Suppression de la règle ::before sur la barre latérale,
+#   car elle n'est plus nécessaire pour masquer l'espace indésirable.
+# Les Media Queries mobiles sont INCHANGÉES.
 _APP_CSS = """
 <style>
   body {
@@ -425,34 +423,13 @@ _APP_CSS = """
   }
 
   /* ========================================================
-     DESKTOP : Sidebar alignée avec le bas du custom-header
-     [MODIF 1] top passe de 3.5rem à 9.5rem (3.5rem barre
-     Streamlit + ~6rem hauteur custom-header).
-     height ajusté en conséquence.
+     DESKTOP : Sidebar alignée parfaitement avec le haut de la page
+     [MODIF 1] top: 0 pour que la barre latérale démarre tout en haut.
      ======================================================== */
   section[data-testid="stSidebar"] {
     z-index: 10000 !important;
-    top: 9.5rem !important;
-    height: calc(100vh - 9.5rem) !important;
-  }
-
-  /* [MODIF 2] Masquer la zone colorée visible entre la barre
-     Streamlit et le début de la sidebar.
-     On force background transparent + no border sur la portion
-     de la sidebar qui chevauche la zone de la barre Streamlit,
-     en ajoutant un pseudo-élément blanc devant la zone [3.5rem → 9.5rem]
-     côté sidebar pour la rendre invisible (fond blanc = fond page). */
-  section[data-testid="stSidebar"]::before {
-    content: '';
-    display: block;
-    position: fixed;
-    top: 3.5rem;
-    left: 0;
-    width: 22rem;
-    height: 6rem;
-    background: transparent !important;
-    pointer-events: none;
-    z-index: 10001;
+    top: 0 !important;
+    height: 100vh !important;
   }
 
   /* L'en-tête personnalisé reste collé sous la barre Streamlit */
@@ -472,11 +449,6 @@ _APP_CSS = """
     section[data-testid="stSidebar"] {
       top: 3.5rem !important;
       height: calc(100vh - 3.5rem) !important;
-    }
-
-    /* Annuler le pseudo-element desktop sur mobile */
-    section[data-testid="stSidebar"]::before {
-      display: none !important;
     }
 
     #custom-header {
@@ -726,7 +698,7 @@ def main():
     def render_single_simulation():
 
         # --------------------------------------------------------
-        # [MODIF 3] BANNIÈRE DE PRÉSENTATION — ajoutée ici,
+        # BANNIÈRE DE PRÉSENTATION — ajoutée ici,
         # après l'en-tête fixe et avant les colonnes Inputs/Membrane.
         # Positionnée dans le flux normal (non fixe) du contenu,
         # donc elle ne chevauche pas la sidebar ni l'en-tête.
