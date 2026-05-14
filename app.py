@@ -1,16 +1,13 @@
 from __future__ import annotations
-
 import io
 import os
 from dataclasses import dataclass
 from datetime import datetime
-
 import numpy as np
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 import base64
-
 from utils.i18n import t
 from utils.constants import (
     CHEMISTRY_COLOR_FALLBACK,
