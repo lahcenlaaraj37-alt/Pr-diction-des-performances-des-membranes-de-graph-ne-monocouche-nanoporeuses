@@ -672,7 +672,7 @@ Faculté des Sciences, Université Mohammed V, Rabat
 
 | | |
 |:---:|:---:|
-| **Prof. S. EL HAJJAJI** | **Prof. Z. ZITI** |
+| **Prof. S. EL HAJJAJI** | **Prof. S. ZITI** |
 | Faculté des Sciences | Faculté des Sciences |
 | Université Mohammed V, Rabat | Université Mohammed V, Rabat |
 
