@@ -1621,7 +1621,7 @@ Master S.A.Q.E, Faculty of Sciences, Mohammed V University, Rabat
 Prof. S. EL HAJJAJI
 </div>
 <div style='color:#333; font-size:1.05rem; font-weight:600; margin-bottom:0.5rem;'>
-Prof. Z. ZITI
+Prof. S. ZITI
 </div>
 <div style='color:#333; font-size:1rem; margin:0;'>
 Faculty of Sciences, Mohammed V University, Rabat
